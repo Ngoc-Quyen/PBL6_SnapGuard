@@ -13,7 +13,7 @@ const Home = () => {
                 <Posts linkAPI={`feed`} />
             </div>
             <div className="right">
-                <RightBar />
+                <RightBar linkAPI={'friend/requests/incoming'} />
             </div>
         </div>
     );

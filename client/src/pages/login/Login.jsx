@@ -45,7 +45,6 @@ const Login = () => {
 
     const handleLogin = async (values) => {
         const result = await login(values);
-        console.log('🚀 ~ handleLogin ~ result:', result);
 
         if (result.success) {
             navigate('/');
@@ -91,9 +90,7 @@ const Login = () => {
                         }}
                         validationSchema={validationSchema}
                         onSubmit={(values) => {
-                            console.log('Form values:', values);
                             handleLogin(values);
-                            // testLogin(values);
                         }}
                     >
                         <Form>

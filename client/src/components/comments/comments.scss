@@ -74,6 +74,11 @@
                     }
                 }
             }
+            .btn-cancel {
+                margin-top: 5px;
+                cursor: pointer;
+                color: blue;
+            }
         }
 
         .comment {
@@ -102,7 +107,73 @@
                         color: themed('textColorSoft');
                         margin: 0px;
                     }
+                    .info-top {
+                        display: flex;
+                        gap: 20px;
+                        align-items: center;
+                        position: relative;
 
+                        .info-content {
+                            position: relative;
+                        }
+                        .modal-edit {
+                            position: static;
+                            top: 0;
+                            .write {
+                                margin: 0;
+                                width: 500px;
+                                .write-content {
+                                    .write-input {
+                                        width: 100%;
+
+                                        .btn-icon {
+                                            margin-left: 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .btn-menu {
+                            display: none;
+                            width: 20px;
+                            height: 20px;
+                            padding: 5px;
+                            border-radius: 50%;
+                            justify-content: center; /* Căn giữa theo chiều ngang */
+                            align-items: center; /* Căn giữa theo chiều dọc */
+                            &:hover {
+                                cursor: pointer;
+                                background-color: themed('bgSoft'); /* Màu nền */
+                            }
+                        }
+
+                        .modal-menu {
+                            position: absolute;
+                            top: 50px;
+                            right: -50px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: start;
+                            width: 100px;
+                            height: auto;
+                            background-color: themed('bgSoft');
+                            padding: 10px;
+                            border-radius: 10px;
+                            z-index: 1000;
+                            .btn {
+                                padding: 5px 10px;
+                                border-radius: 5px;
+                                &:hover {
+                                    background-color: rgb(162, 160, 160);
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
+                    &:hover .btn-menu {
+                        display: flex;
+                        opacity: 0.8;
+                    }
                     .comment-img {
                         width: auto;
                         height: 150px;
@@ -121,6 +192,7 @@
                 align-items: center;
                 gap: 20px;
                 margin-left: 50px;
+                margin-top: 10px;
                 .date {
                     align-self: center;
                     color: gray;

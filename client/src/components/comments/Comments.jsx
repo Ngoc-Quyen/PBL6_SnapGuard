@@ -1,11 +1,12 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import './comments.scss';
 import { AuthContext } from '../../context/authContext';
 import useNode from '../../hooks/useNode';
 import { calculateTimeDifference } from '../../utils/calculateTimeDifference ';
 import axios from 'axios';
+import ModalEditComment from './ModalEditComment';
 
-const Comments = ({ comments, postId }) => {
+const Comments = ({ comments, postId, setCommentCount }) => {
     const { currentUser } = useContext(AuthContext);
     const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
     const storedToken = localStorage.getItem('token');
@@ -15,7 +16,7 @@ const Comments = ({ comments, postId }) => {
     const textareaRef = useRef(null);
     const fileInputRef = useRef(null);
     const [previewImage, setPreviewImage] = useState(null);
-    const [newComment, setNewComment] = useState('');
+
     const handleInput = () => {
         const textarea = textareaRef.current;
         if (textarea) {
@@ -76,6 +77,8 @@ const Comments = ({ comments, postId }) => {
                 setImage(null);
                 setPreviewImage(null);
                 fileInputRef.current.value = null;
+
+                setCommentCount(updatedComments.length);
             } catch (error) {
                 console.error('Error:', error.response?.data || error.message);
                 alert('Có lỗi xảy ra khi bình luận. Vui lòng thử lại.');
@@ -101,6 +104,75 @@ const Comments = ({ comments, postId }) => {
     const handleImageClick = () => {
         setIsImageOpen(!isImageOpen);
     };
+    const [isModalVisible, setModalVisible] = useState({});
+
+    // Hàm toggle để hiển thị/ẩn modal
+    const toggleModal = (id) => {
+        setModalVisible((prevState) => ({
+            ...prevState,
+            [id]: !prevState[id], // Đổi trạng thái like của comment có id tương ứng
+        }));
+    };
+
+    const handleDeleteComment = async (id) => {
+        try {
+            const response = await axios.delete(`${API_ENDPOINT}/posts//comments/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                },
+            }); // Thay đường dẫn bằng API của bạn
+
+            if (response.status === 200) {
+                // Cập nhật danh sách comments sau khi xóa
+                setListComments((prevComments) => prevComments.filter((comment) => comment.comment_id !== id));
+                // Cập nhật số lượng bình luận
+                setCommentCount((prevCount) => prevCount - 1);
+
+                // Ẩn modal của comment vừa xóa
+                setModalVisible((prevState) => ({
+                    ...prevState,
+                    [id]: false,
+                }));
+            } else {
+                console.error('Failed to delete comment');
+            }
+        } catch (error) {
+            console.error('Error while deleting comment:', error);
+        }
+    };
+
+    const [showModalEdit, setShowModalEdit] = useState({});
+    const handleShowModalEdit = (id) => {
+        setShowModalEdit((prevState) => ({
+            ...prevState,
+            [id]: !prevState[id],
+        }));
+        console.log('🚀 ~ Comments ~ showModalEdit:', showModalEdit);
+        setModalVisible((prevState) => ({
+            ...prevState,
+            [id]: false,
+        }));
+    };
+    const handleCloseModal = (id) => {
+        setShowModalEdit((prevState) => ({
+            ...prevState,
+            [id]: false,
+        }));
+    };
+
+    useEffect(() => {
+        // Tạo một hàm async trong useEffect
+        const fetchComments = async () => {
+            try {
+                const updatedComments = await getListComment(postId);
+                setListComments(updatedComments);
+            } catch (error) {
+                console.error('Error fetching comments:', error);
+            }
+        };
+
+        fetchComments();
+    }, [postId]);
     return (
         <div className="comments">
             <div className="write">
@@ -163,16 +235,70 @@ const Comments = ({ comments, postId }) => {
                         <div className="comment-content">
                             <img src={comment.user.avatar_url} alt="" />
                             <div className="info">
-                                <span>{comment.user.full_name}</span>
-                                <p>{comment.content}</p>
+                                <div className="info-top">
+                                    <div
+                                        className="info-content"
+                                        style={{
+                                            display: showModalEdit[comment.comment_id] ? 'none' : 'block',
+                                        }}
+                                    >
+                                        <span>{comment.user.full_name}</span>
+                                        <p>{comment.content}</p>
+                                    </div>
+                                    {showModalEdit[comment.comment_id] && comment && (
+                                        <ModalEditComment
+                                            user={comment.user}
+                                            comment={comment}
+                                            onClose={() => handleCloseModal(comment.comment_id)}
+                                            getListComment={() => getListComment(postId)}
+                                            setListComments={setListComments} // Truyền hàm cập nhật state
+                                        />
+                                    )}
+
+                                    <div
+                                        className="btn-menu"
+                                        onClick={() => toggleModal(comment.comment_id)}
+                                        style={{
+                                            display: showModalEdit[comment.comment_id] ? 'none' : 'flex',
+                                        }}
+                                    >
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </div>
+                                    {isModalVisible[comment.comment_id] && (
+                                        <div className="modal-menu">
+                                            <div
+                                                className="btn btn-edit"
+                                                onClick={() => handleShowModalEdit(comment.comment_id)}
+                                            >
+                                                Chỉnh sửa
+                                            </div>
+                                            <div
+                                                className="btn btn-delete"
+                                                onClick={() => handleDeleteComment(comment.comment_id)}
+                                            >
+                                                Xóa
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                                 {comment.image_url && (
-                                    <div className="comment-img">
+                                    <div
+                                        className="comment-img"
+                                        style={{
+                                            display: showModalEdit[comment.comment_id] ? 'none' : 'block',
+                                        }}
+                                    >
                                         <img src={comment.image_url} alt="" />
                                     </div>
                                 )}
                             </div>
                         </div>
-                        <div className="btn-icon">
+                        <div
+                            className="btn-icon"
+                            style={{
+                                display: showModalEdit[comment.comment_id] ? 'none' : 'flex',
+                            }}
+                        >
                             <span className="date">{calculateTimeDifference(comment.created_at)}</span>
                             <div className="item" onClick={() => handleClickLiked(comment.comment_id)}>
                                 {likedComments[comment.comment_id] ? (

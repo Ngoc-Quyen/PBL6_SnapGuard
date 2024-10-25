@@ -6,11 +6,9 @@ import { vi } from 'date-fns/locale';
 import './chatLeft.scss';
 
 const ItemChat = (props) => {
-
     const [isMenuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
     const parsedTime = parseISO(props.user.time);
-
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -76,7 +74,6 @@ const ItemChat = (props) => {
                         <span className="time">{timeAgo}</span>
                     </div>
                 </div>
-
             </div>
             <div className="menu-container" ref={menuRef}>
                 <button className="menu-toggle" onClick={toggleMenu}>
@@ -94,7 +91,6 @@ const ItemChat = (props) => {
                         </div>
                     </div>
                 )}
-
             </div>
         </Link>
     );

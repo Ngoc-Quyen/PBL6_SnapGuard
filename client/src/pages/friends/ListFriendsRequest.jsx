@@ -1,18 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Friend from './Friend';
 import { listInvitation } from '../../utils/dataTest';
 import './friend.scss';
 import { Link } from 'react-router-dom';
-const ListFriendsRequest = () => {
+import axios from 'axios';
+const ListFriendsRequest = ({ linkAPI }) => {
     const [visibleCount, setVisibleCount] = useState(5);
     const [isClick, setIsClick] = useState(false);
-    const list = listInvitation;
+
+    const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+    const storedToken = localStorage.getItem('token');
+
+    const [listFriends, setListFriends] = useState([]);
+    const fetchFriends = async () => {
+        try {
+            const response = await axios.get(`${API_ENDPOINT}/${linkAPI}`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                },
+            });
+            setListFriends(response.data); // Assume response.data contains the posts array
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    };
+
+    //TEMPORARY
+    useEffect(() => {
+        fetchFriends();
+    }, [linkAPI]);
     const handleShowMore = () => {
         setVisibleCount((prevCount) => prevCount + 5); // Tăng thêm 2 bạn bè mỗi lần nhấn "Xem thêm"
     };
     const handleShowAll = () => {
         if (!isClick) {
-            setVisibleCount(list.length); // Hiển thị tất cả bạn bè
+            setVisibleCount(listFriends.length); // Hiển thị tất cả bạn bè
         } else {
             setVisibleCount(10); // Trở lại hiển thị 10 bạn bè
         }
@@ -27,13 +49,13 @@ const ListFriendsRequest = () => {
                 </Link>
             </div>
             <div className="show-list">
-                {list.slice(0, visibleCount).map((friend) => (
-                    <Friend key={friend.id} name={friend.name} avata={friend.avata} />
+                {listFriends.slice(0, visibleCount).map((friend) => (
+                    <Friend key={friend.requestId} name={friend.recipientName} avata={friend.recipientAvatar} />
                 ))}
             </div>
 
             <div style={{ borderBottom: '2px solid rgb(179, 177, 177)', margin: '20px 0px' }}>
-                {visibleCount < list.length && ( // Hiển thị nút "Xem thêm" chỉ khi còn bạn bè để hiển thị
+                {visibleCount < listFriends.length && ( // Hiển thị nút "Xem thêm" chỉ khi còn bạn bè để hiển thị
                     <div className="more" onClick={handleShowMore}>
                         <p className="more-title">Xem thêm</p>
                         <i className="fas fa-sort-down"></i>

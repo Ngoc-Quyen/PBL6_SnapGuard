@@ -35,7 +35,6 @@ const MyProfile = () => {
                 },
             });
             setUserProfile(response.data); // Assume response.data contains the posts array
-            console.log('🚀 ~ fetchUserProfile ~ response.data:', response.data);
         } catch (error) {
             console.error('Error fetching posts:', error);
         }
@@ -84,7 +83,7 @@ const MyProfile = () => {
                 <div className="uContent">
                     <div className="uContent-mota">
                         <LeftProfile userProfile={userProfile} />
-                        <ListFriends />
+                        <ListFriends linkAPI={'friend/list'} />
                     </div>
                     <div className="uContent-Post">
                         <Posts userId={currentUser.id} linkAPI={`${currentUser.id}/posts`} refresh={refreshPosts} />
