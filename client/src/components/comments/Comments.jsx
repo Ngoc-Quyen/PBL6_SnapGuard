@@ -2,37 +2,20 @@ import { useContext, useRef, useState } from 'react';
 import './comments.scss';
 import { AuthContext } from '../../context/authContext';
 import useNode from '../../hooks/useNode';
+import { calculateTimeDifference } from '../../utils/calculateTimeDifference ';
+import axios from 'axios';
 
-const Comments = () => {
+const Comments = ({ comments, postId }) => {
     const { currentUser } = useContext(AuthContext);
-    //Temporary
-    const comments = [
-        {
-            id: 1,
-            desc: 'hihi',
-            name: 'Ngân ngân',
-            userId: 1,
-            profilePicture:
-                'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-        },
-        {
-            id: 2,
-            desc: 'hehe',
-            name: 'Quyên quyên',
-            userId: 2,
-            profilePicture:
-                'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600',
-            commentImg:
-                'https://scontent.fdad3-3.fna.fbcdn.net/v/t39.30808-6/465472153_1122467853214999_6493259625208381744_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGURjuxvaY1YJnUSrF618RVQvcRCIzvvIZC9xEIjO-8hrk6sqX1GAp7INpTLT-EEFqrCNixXj5UDylOud0fTOuP&_nc_ohc=Xm5reT8pAYYQ7kNvgFvv-bv&_nc_zt=23&_nc_ht=scontent.fdad3-3.fna&_nc_gid=AdBmwfeE0-T2ldLxobOd8-o&oh=00_AYBk1kA35I4XntX-fuR1xNQL40_w6URx6KPLeaFmDfJtzw&oe=672EAF37',
-        },
-    ];
-
+    const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+    const storedToken = localStorage.getItem('token');
+    const [listComments, setListComments] = useState(comments || []);
     const [comment, setComment] = useState('');
     const [image, setImage] = useState(null);
     const textareaRef = useRef(null);
     const fileInputRef = useRef(null);
     const [previewImage, setPreviewImage] = useState(null);
-
+    const [newComment, setNewComment] = useState('');
     const handleInput = () => {
         const textarea = textareaRef.current;
         if (textarea) {
@@ -51,23 +34,57 @@ const Comments = () => {
             setPreviewImage(URL.createObjectURL(file)); // Tạo URL tạm thời để xem trước ảnh
         }
     };
-    const handleSendComment = () => {
+    // Hàm để gọi API lấy danh sách comment
+    const getListComment = async (postId) => {
+        try {
+            const response = await axios.get(`${API_ENDPOINT}/posts/${postId}/comments`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                },
+            });
+            return Array.isArray(response.data) ? response.data : [];
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+            return []; // Trả về mảng rỗng nếu có lỗi
+        }
+    };
+    const handleSendComment = async () => {
         if (comment.trim() || image) {
-            console.log('Nội dung bình luận:', comment);
-            if (image) {
-                console.log('Ảnh đính kèm:', image);
-            }
-            // Thực hiện gửi nội dung bình luận và ảnh lên server tại đây
+            try {
+                const formData = new FormData(); // Tạo FormData để gửi file
+                formData.append('userId', currentUser.id); // Thêm userId
+                formData.append('content', comment); // Thêm nội dung bình luận
+                formData.append('parentCommentId', ''); // Thêm parentCommentId nếu cần
+                if (image) {
+                    formData.append('image', image); // Thêm file ảnh vào FormData
+                }
 
-            // Xóa nội dung ô nhập và ảnh sau khi gửi
-            setComment('');
-            setImage(null);
-            setPreviewImage(null);
-            fileInputRef.current.value = null; // Xóa giá trị file input
+                const response = await axios.post(`${API_ENDPOINT}/posts/${postId}/comments`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${storedToken}`,
+                        'Content-Type': 'multipart/form-data', // Đặt header cho FormData
+                    },
+                });
+
+                if (response.status === 201 || response.status === 200) {
+                    console.log('Bình luận thành công!');
+                }
+                const updatedComments = await getListComment(postId);
+                setListComments(updatedComments);
+                // Reset form sau khi gửi
+                setComment('');
+                setImage(null);
+                setPreviewImage(null);
+                fileInputRef.current.value = null;
+            } catch (error) {
+                console.error('Error:', error.response?.data || error.message);
+                alert('Có lỗi xảy ra khi bình luận. Vui lòng thử lại.');
+            }
         } else {
             alert('Vui lòng nhập bình luận hoặc chọn ảnh!');
         }
     };
+
     // Khởi tạo một đối tượng để lưu trạng thái liked theo id của comment
     const [likedComments, setLikedComments] = useState({});
 
@@ -140,35 +157,36 @@ const Comments = () => {
                     )}
                 </div>
             </div>
-            {comments.map((comment) => (
-                <div className="comment">
-                    <div className="comment-content">
-                        <img src={comment.profilePicture} alt="" />
-                        <div className="info">
-                            <span>{comment.name}</span>
-                            <p>{comment.desc}</p>
-                            {comment.commentImg && (
-                                <div className="comment-img">
-                                    <img src={comment.commentImg} alt="" />
-                                </div>
-                            )}
+            {Array.isArray(listComments) &&
+                listComments.map((comment) => (
+                    <div className="comment">
+                        <div className="comment-content">
+                            <img src={comment.user.avatar_url} alt="" />
+                            <div className="info">
+                                <span>{comment.user.full_name}</span>
+                                <p>{comment.content}</p>
+                                {comment.image_url && (
+                                    <div className="comment-img">
+                                        <img src={comment.image_url} alt="" />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="btn-icon">
+                            <span className="date">{calculateTimeDifference(comment.created_at)}</span>
+                            <div className="item" onClick={() => handleClickLiked(comment.comment_id)}>
+                                {likedComments[comment.comment_id] ? (
+                                    <i className="fas fa-heart font-size-18" style={{ color: 'red' }}></i>
+                                ) : (
+                                    <i className="far fa-heart font-size-18"></i>
+                                )}
+                            </div>
+                            <div className="btn-comment">
+                                <i class="fas fa-comment-dots"></i>
+                            </div>
                         </div>
                     </div>
-                    <div className="btn-icon">
-                        <span className="date">1 giờ</span>
-                        <div className="item" onClick={() => handleClickLiked(comment.id)}>
-                            {likedComments[comment.id] ? (
-                                <i className="fas fa-heart font-size-18" style={{ color: 'red' }}></i>
-                            ) : (
-                                <i className="far fa-heart font-size-18"></i>
-                            )}
-                        </div>
-                        <div className="btn-comment">
-                            <i class="fas fa-comment-dots"></i>
-                        </div>
-                    </div>
-                </div>
-            ))}
+                ))}
         </div>
     );
 };

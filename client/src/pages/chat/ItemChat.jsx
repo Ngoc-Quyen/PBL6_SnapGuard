@@ -78,7 +78,6 @@ const ItemChat = (props) => {
                     Lưu trữ đoạn chat
                 </Link>
             </div> */}
-
             </div>
         </Link>
     );

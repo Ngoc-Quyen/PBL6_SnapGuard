@@ -15,12 +15,20 @@ const Navbar = () => {
     const { toggle, darkMode } = useContext(DarkModeContext);
     const { currentUser } = useContext(AuthContext);
     const [isChatOpen, setIsChatOpen] = useState(false);
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+
     const handleToggleChat = () => {
-        setIsChatOpen((prevState) => !prevState);
+        if (isNotificationOpen) {
+            setIsNotificationOpen(false); // Đóng thông báo nếu đang mở
+        }
+        setIsChatOpen((prevState) => !prevState); // Toggle chat
     };
-    const [isNotification, setIsNotification] = useState(false);
+
     const handleToggleNotification = () => {
-        setIsNotification((prevState) => !prevState);
+        if (isChatOpen) {
+            setIsChatOpen(false); // Đóng chat nếu đang mở
+        }
+        setIsNotificationOpen((prevState) => !prevState); // Toggle notification
     };
     return (
         <div className="navbar">
@@ -54,7 +62,7 @@ const Navbar = () => {
                 </div>
             )}
 
-            {isNotification && (
+            {isNotificationOpen && (
                 <div className="show-chat">
                     <Notification />
                 </div>

@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './profile.scss';
 import Select from 'react-select';
 import axios from 'axios';
+import { AuthContext } from '../../context/authContext';
 
 const ModalSetAvata = ({ user, onClose }) => {
     const fileInputRef = React.useRef(null);
     const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+    const storedToken = localStorage.getItem('token');
+    const { updateAvatar } = useContext(AuthContext);
     const [imageSrc, setImageSrc] = useState(user.avatar_url);
     const [selectedFile, setSelectedFile] = useState(null);
     const handleIconClick = () => {
@@ -34,15 +37,19 @@ const ModalSetAvata = ({ user, onClose }) => {
             return;
         }
         const formData = new FormData();
-        formData.append('avatar_url', selectedFile);
+        formData.append('image', selectedFile);
 
         try {
             const response = await axios.put(`${API_ENDPOINT}/user/profile`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                    'Content-Type': 'multipart/form-data', // Đặt header cho FormData
+                },
             });
 
             if (response.status === 200) {
                 alert('Lưu ảnh thành công!');
+                updateAvatar(response.data.user.avatar_url); // Cập nhật trong AuthContext
                 onClose(); // Đóng modal khi thành công
             }
         } catch (error) {

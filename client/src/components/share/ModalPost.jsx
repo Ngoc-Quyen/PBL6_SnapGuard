@@ -1,16 +1,21 @@
 import React, { useRef, useState } from 'react';
 import './share.scss';
 import Select from 'react-select';
+import { statusPost } from '../../utils/status';
 import axios from 'axios';
 
-const ModalPost = ({ userName, onClose, ...props }) => {
-    const [text, setText] = useState('');
+const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
+    const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+    const storedToken = localStorage.getItem('token');
+
+    const [values, setValues] = useState('');
     const [imagePreviews, setImagePreviews] = useState([]);
     const closeModal = () => {
-        setText('');
         setImagePreviews([]);
+        setValues('');
         onClose();
     };
+
     const handleImageUpload = (e) => {
         const files = Array.from(e.target.files); // Lấy danh sách các tệp
         const newImagePreviews = [];
@@ -27,30 +32,42 @@ const ModalPost = ({ userName, onClose, ...props }) => {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Handle submit logic here (e.g., API call)
-        closeModal();
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Ngăn reload trang
+
+        try {
+            // Tạo FormData để gửi file và dữ liệu
+            const formData = new FormData();
+            formData.append('content', values); // Nội dung từ div chỉnh sửa
+            formData.append('accessModifier', selectedOption?.value || 'public'); // Giá trị quyền truy cập
+            if (fileInputRef.current.files[0]) {
+                formData.append('image', fileInputRef.current.files[0]); // Thêm file ảnh vào FormData
+            }
+
+            // Gọi API
+            const response = await axios.post(`${API_ENDPOINT}/posts`, formData, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                    'Content-Type': 'multipart/form-data', // Đảm bảo header đúng
+                },
+            });
+
+            // Xử lý phản hồi thành công
+            if (response.status === 201 || response.status === 200) {
+                alert('Đăng bài thành công!');
+                onPostCreated();
+                closeModal(); // Đóng modal sau khi đăng thành công
+            }
+        } catch (error) {
+            // Xử lý lỗi
+            console.error('Error:', error.response?.data || error.message);
+            alert('Có lỗi xảy ra khi đăng bài. Vui lòng thử lại.');
+        }
     };
-    const status = [
-        {
-            id: 0,
-            name: 'Chỉ mình tôi',
-            classIcon: 'fa-lock',
-        },
-        {
-            id: 1,
-            name: 'Bạn bè',
-            classIcon: 'fa-user-friends',
-        },
-        {
-            id: 2,
-            name: 'Mọi người',
-            classIcon: 'fa-globe-asia',
-        },
-    ];
+
+    const status = statusPost;
     const options = status.map((item) => ({
-        value: item.id,
+        value: item.accessModifier,
         label: (
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <i className={`fas ${item.classIcon}`} style={{ marginRight: 8 }}></i>
@@ -58,6 +75,8 @@ const ModalPost = ({ userName, onClose, ...props }) => {
             </div>
         ),
     }));
+    const [selectedOption, setSelectedOption] = useState(options[1]); // Giá trị mặc định
+
     const fileInputRef = React.useRef(null);
 
     const handleIconClick = () => {
@@ -65,9 +84,6 @@ const ModalPost = ({ userName, onClose, ...props }) => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
-    };
-    const handleTextChange = (e) => {
-        setText(e.target.value);
     };
     const editableDivRef = useRef(null);
 
@@ -82,7 +98,11 @@ const ModalPost = ({ userName, onClose, ...props }) => {
             sendDataToServer(content);
         }
     };
-
+    const handleBlur = () => {
+        // Lấy nội dung khi mất tiêu điểm
+        const content = editableDivRef.current.innerHTML;
+        sendDataToServer(content); // Lưu nội dung
+    };
     const insertBrAtCursor = () => {
         const sel = window.getSelection();
         const range = sel.getRangeAt(0);
@@ -94,16 +114,9 @@ const ModalPost = ({ userName, onClose, ...props }) => {
         sel.removeAllRanges();
         sel.addRange(range);
     };
-    const [values, setValues] = useState('');
     const sendDataToServer = async (content) => {
         try {
-            // const response = await axios.post('https://your-api-endpoint.com/submit', {
-            //     content, // Gửi dữ liệu dưới dạng JSON
-            // });
-
-            // console.log('Success:', response.data); // Xử lý dữ liệu trả về nếu cần
             setValues(content);
-            console.log('content: ', content);
         } catch (error) {
             console.error('Error:', error); // Xử lý lỗi nếu có
         }
@@ -127,7 +140,11 @@ const ModalPost = ({ userName, onClose, ...props }) => {
                         <img src={props.src} alt="" />
                         <div className="info">
                             <span>{userName}</span>
-                            <Select options={options} defaultValue={options[1]} />
+                            <Select
+                                options={options}
+                                defaultValue={options[1]}
+                                onChange={(option) => setSelectedOption(option)}
+                            />
                         </div>
                     </div>
                     <form onSubmit={handleSubmit}>
@@ -139,6 +156,7 @@ const ModalPost = ({ userName, onClose, ...props }) => {
                                 onKeyDown={handleKeyDown}
                                 className="chatgpt"
                                 data-placeholder="Bạn đang nghĩ gì?"
+                                onBlur={handleBlur}
                             ></div>
                             <div className="grid-container">
                                 {imagePreviews.length > 0 &&
