@@ -1,0 +1,199 @@
+@use '../../style' as *;
+.chat {
+    @include themify($themes) {
+        background-color: themed('bgPrimary');
+        color: themed('textColor');
+
+        @include mobile {
+            display: none;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        border-radius: 10px;
+        // padding: 10px 20px;
+        height: 88vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            .info-user {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 5px 10px;
+                &:hover {
+                    background-color: themed('bgPrimarySoft');
+                    border-radius: 10px;
+                    cursor: pointer;
+                }
+                .avata {
+                    width: 40px;
+                    height: 40px;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: 50%;
+                    }
+                }
+                .name {
+                    font-size: 18px;
+                    font-weight: 600;
+                    margin: 10px;
+                }
+            }
+            .info-detail {
+                margin-right: 10px;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                i {
+                    font-size: 20px;
+                }
+                &:hover {
+                    cursor: pointer;
+                    background-color: themed('bgPrimarySoft');
+                    border-radius: 50%;
+                }
+            }
+        }
+
+        .container {
+            padding: 10px 20px;
+        }
+        .footer {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            .image-preview-container {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                max-width: 1124px; // Đảm bảo khung không vượt quá component cha
+                overflow-x: auto; // Kích hoạt cuộn ngang khi cần
+                white-space: nowrap; // Đảm bảo tất cả ảnh nằm trên một dòng
+                padding-bottom: 5px;
+
+                &::-webkit-scrollbar {
+                    width: 8px; // Chiều rộng thanh cuộn
+                    height: 10px;
+                }
+                &::-webkit-scrollbar-thumb {
+                    background: #727474; // Màu của thanh cuộn
+                    border-radius: 10px; // Bo góc thanh cuộn
+                }
+
+                &::-webkit-scrollbar-thumb:hover {
+                    background: #505150; // Màu khi hover
+                }
+                &::-webkit-scrollbar-track {
+                    background: #aeaeae; /* Màu nền của thanh cuộn */
+                    border-radius: 10px; /* Bo góc cho nền */
+                }
+                .image-preview {
+                    flex-shrink: 0; // Đảm bảo ảnh không co lại
+                    width: 100px; // Đặt width cố định cho mỗi ảnh
+                    max-height: 100px;
+                    position: relative;
+                    display: flex;
+                    gap: 10px;
+                    margin-top: 10px;
+                    img {
+                        width: 100%;
+                        // height: 100%;
+                        border-radius: 10px;
+                        object-fit: cover;
+                    }
+                    i {
+                        margin-left: -15px;
+                        margin-top: -6px;
+                    }
+                }
+            }
+            .input-send {
+                display: flex;
+                justify-content: space-between;
+                align-items: end;
+                gap: 10px;
+                // background-color: #d0f7f4;
+                padding: 10px;
+                box-sizing: border-box;
+                border-radius: 20px;
+                .input {
+                    width: 100%;
+                    display: flex;
+                    align-items: end;
+                    // background-color: themed('bgPrimarySoft');
+                    border-radius: 10px;
+
+                    .input-textarea {
+                        position: relative;
+                        width: 100%;
+                        font-size: 18px;
+                        background-color: transparent;
+                        max-height: 100px;
+                        box-sizing: border-box;
+                        resize: none;
+                        color: themed('textColorSoft');
+                        border: 1.5px solid rgb(109, 107, 107);
+                        border-radius: 20px;
+                        padding: 10px 60px 10px 15px;
+                        &:focus {
+                            border-radius: 20px;
+                            border: 2px solid rgb(109, 107, 107);
+                        }
+                        &:focus-visible {
+                            outline: none;
+                        }
+
+                        &::-webkit-scrollbar {
+                            width: 9px; // Chiều rộng thanh cuộn
+                        }
+                        &::-webkit-scrollbar-thumb {
+                            background: #727474; // Màu của thanh cuộn
+                            border-radius: 10px; // Bo góc thanh cuộn
+                        }
+
+                        &::-webkit-scrollbar-thumb:hover {
+                            background: #505150; // Màu khi hover
+                        }
+                        &::-webkit-scrollbar-track {
+                            background: #aeaeae; /* Màu nền của thanh cuộn */
+                            border-radius: 10px; /* Bo góc cho nền */
+                        }
+                    }
+                    .btn-icon {
+                        position: absolute;
+                        right: 60px;
+                        bottom: 30px;
+                        cursor: pointer;
+                        margin-left: 10px;
+                        i {
+                            font-size: 20px;
+                        }
+                    }
+                    .btn-img {
+                        margin-right: 15px;
+                        margin-left: 5px;
+                        i {
+                            font-size: 20px;
+                        }
+                    }
+                }
+                .send {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

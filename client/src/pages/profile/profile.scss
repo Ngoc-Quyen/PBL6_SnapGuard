@@ -1,0 +1,259 @@
+@use '../../style' as *;
+
+.profile {
+    @include themify($themes) {
+        background-color: themed('bgSoft');
+
+        .profileContainer {
+            padding: 20px 50px;
+            .images {
+                width: 100%;
+                height: 300px;
+                // position: relative;
+
+                .cover {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                .avatar {
+                    width: 100%;
+                    position: relative;
+                    display: inline-block; /* Đảm bảo phần tử avatar không chiếm toàn bộ không gian */
+
+                    .profilePic {
+                        width: 200px;
+                        height: 200px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        position: absolute;
+                        left: 20px;
+                        margin: auto;
+                        top: -70px;
+                    }
+                    .cameraIcon {
+                        position: absolute; /* Đặt icon camera lên trên ảnh */
+                        bottom: -130px;
+                        left: 160px;
+                        font-size: 24px; /* Kích thước của biểu tượng */
+                        color: white; /* Màu của biểu tượng */
+                        background-color: rgba(0, 0, 0, 0.5); /* Nền mờ cho icon */
+                        border-radius: 50%; /* Để biểu tượng camera có hình tròn */
+                        padding: 5px; /* Đệm xung quanh icon */
+                        cursor: pointer; /* Thêm con trỏ để người dùng biết có thể click */
+                    }
+
+                    .cameraIcon:hover {
+                        background-color: rgba(0, 0, 0, 0.7); /* Tăng độ đậm của nền khi hover */
+                    }
+                    .modal-overlay {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: rgba(0, 0, 0, 0.5);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 100;
+
+                        .modal {
+                            background: themed('bg');
+                            padding: 20px;
+                            border-radius: 8px;
+                            width: 600px;
+                            max-width: 90%;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: right;
+                            max-height: 600px;
+                            margin-left: 15%;
+                            .title-top {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding-bottom: 10px;
+                                border-bottom: 2px solid rgb(207, 204, 204);
+                                margin-bottom: 20px;
+                                .title {
+                                    font-size: 25px;
+                                    font-weight: 600;
+                                    text-align: center;
+                                    color: themed('textColorSoft');
+                                    width: 100%;
+                                }
+                                .close-button {
+                                    background: none;
+                                    border: none;
+                                    font-size: 1.5rem;
+                                    cursor: pointer;
+                                    i {
+                                        color: themed('textColorSoft');
+                                    }
+                                }
+                            }
+                            .set-avatar {
+                                color: themed('textColor');
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                flex-direction: column;
+                                .avatar {
+                                    max-width: 400px;
+                                    max-height: 400px;
+                                    img {
+                                        border-radius: 10px;
+                                        width: 100%;
+                                        // height: 100%;
+                                        height: auto; /* Giữ tỷ lệ ảnh */
+                                        object-fit: cover;
+                                    }
+                                }
+                                .btn-img {
+                                    display: flex;
+                                    gap: 10px;
+                                    align-items: center;
+                                    margin-top: 20px;
+                                    cursor: pointer;
+                                }
+                            }
+                            .btn {
+                                display: flex;
+                                gap: 10px;
+                                justify-content: end;
+                                button {
+                                    padding: 10px 15px;
+                                    font-size: 18px;
+                                    border: none;
+                                    border-radius: 10px;
+                                    cursor: pointer;
+                                }
+                                .btn-submit {
+                                    background-color: themed('bgBtn');
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            @include mobile {
+                padding: 10px;
+            }
+
+            @include tablet {
+                padding: 20px;
+            }
+
+            .uInfo {
+                height: 180px;
+                -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+                -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+                box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+                border-radius: 20px;
+                background-color: themed('bg');
+                color: themed('textColor');
+                padding-left: 50px;
+                display: flex;
+                // align-items: center;
+                justify-content: space-between;
+                margin-bottom: 20px;
+
+                @include mobile {
+                    flex-direction: column;
+                    height: 30vh;
+                    padding: 20px;
+                    margin-top: 100px;
+                }
+
+                .center {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 10px;
+                    margin-top: 20px;
+                    margin-left: 180px;
+                    span {
+                        font-size: 30px;
+                        font-weight: 500;
+                    }
+                    .number-friends {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: themed('textColorSoft');
+                    }
+                    .info {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-around;
+
+                        .item {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+                            color: themed('textColorSoft');
+
+                            span {
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                }
+
+                .right {
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: 10px;
+                    .btn {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+                        padding: 10px;
+                        .btn-chat,
+                        .btn-friend {
+                            font-size: 16px;
+                            padding: 10px 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border: none;
+                            border-radius: 5px;
+                            color: azure;
+                            cursor: pointer;
+                            transition: background-color 0.3s;
+                        }
+                        .btn-chat {
+                            background-color: #5271ff;
+                        }
+                        .btn-chat:hover {
+                            background-color: #6a84fa;
+                        }
+                        .btn-friend {
+                            background-color: gray;
+                        }
+                        .btn-friend:hover {
+                            background-color: rgb(142, 139, 139);
+                        }
+                    }
+                }
+            }
+            .uContent {
+                display: flex;
+                gap: 10px;
+                .uContent-mota {
+                    flex: 3;
+                }
+                .uContent-Post {
+                    flex: 6;
+                }
+            }
+        }
+    }
+}
