@@ -74,6 +74,8 @@
                         white-space: nowrap; /* Ngăn không cho văn bản xuống dòng */
                         overflow: hidden; /* Ẩn phần văn bản tràn ra ngoài */
                         text-overflow: ellipsis;
+                        text-decoration: none;
+                        color: themed('textColor');
                     }
                     &:hover {
                         cursor: pointer;

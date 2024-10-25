@@ -50,7 +50,13 @@ const ListFriendsRequestOut = ({ linkAPI }) => {
             </div>
             <div className="show-list">
                 {listFriends.slice(0, visibleCount).map((friend) => (
-                    <FriendRequestOut key={friend.requestId} friend={friend} />
+                    <FriendRequestOut
+                        key={friend.requestId}
+                        friend={friend}
+                        reload={() => {
+                            fetchFriends();
+                        }}
+                    />
                 ))}
             </div>
 

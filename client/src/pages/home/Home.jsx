@@ -6,7 +6,6 @@ import RightBar from '../../components/rightBar/RightBar';
 import { useState } from 'react';
 
 const Home = () => {
-
     const [refreshPosts, setRefreshPosts] = useState(false);
 
     const handlePostCreated = () => {
@@ -16,7 +15,7 @@ const Home = () => {
     return (
         <div className="home">
             <div className="left">
-                <Stories />
+                {/* <Stories /> */}
                 <Share onPostCreated={handlePostCreated} />
                 <Posts linkAPI={`feed`} />
             </div>

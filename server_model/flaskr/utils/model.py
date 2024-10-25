@@ -3,10 +3,8 @@ import numpy as np
 from PIL import Image
 
 # Tải mô hình đã lưu
-# model = load_model('./model/mobileNet_2class_v3_11_11.keras')  # Thay đổi đường dẫn nếu cần
-model = load_model('D:\ki7\PBL6-client\PBL6_SnapGuard\server_model\model\mobileNet_2class_v3_11_11.keras') 
-
-
+# model = load_model('D:\Ki7\PBL6_SnapGuard\server_model\model\mobileNet_2class_v3_11_11.keras')  # Thay đổi đường dẫn nếu cần
+model = load_model('./model/mobileNet_2class_v3_11_11.keras')
 # Xác định các lớp dự đoán
 class_names = ['safe', 'unsafe']
 

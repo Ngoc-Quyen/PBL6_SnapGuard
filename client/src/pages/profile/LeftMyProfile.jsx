@@ -11,6 +11,9 @@ const LeftProfile = ({ userProfile }) => {
             </div>
             <div className="content-bio">
                 <span>{userProfile.bio}</span>
+                <div className="btn-edit-bio">
+                    <span>Chỉnh sửa tiểu sử</span>
+                </div>
             </div>
             <div className="content-other">
                 <ul className="list-other">
@@ -27,6 +30,9 @@ const LeftProfile = ({ userProfile }) => {
                         </p>
                     </li>
                 </ul>
+                <div className="btn-edit-detail">
+                    <span>Chỉnh sửa chi tiết</span>
+                </div>
             </div>
         </div>
     );

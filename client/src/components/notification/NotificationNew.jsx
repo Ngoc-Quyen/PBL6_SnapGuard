@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import './notification.scss';
 import { Link } from 'react-router-dom';
+import { calculateTimeDifference } from '../../utils/calculateTimeDifference ';
 
-const NotificationNew = (props) => {
+const NotificationNew = ({ notifi }) => {
     const [checkSeen, setCheckSeen] = useState(false);
     const [bell, setBell] = useState(false);
+
     return (
         <div className="item-chat">
             <div className="item-avata">
-                <img src={props.notifi.avatar_url} alt="" />
+                <img src={notifi.sender.avatar_url} alt="" />
             </div>
             <div className="item-content">
                 <p className="content cl-text">
-                    <span className="name">{props.notifi.name}</span> {props.notifi.message}
+                    <span className="name">{notifi.sender.full_name}</span> {notifi.content}
                 </p>
-                <span className="time cl-blue">{props.notifi.time}</span>
+                <span className="time cl-blue">{calculateTimeDifference(notifi.created_at)}</span>
             </div>
 
             <div className="modal-menu" style={{ display: 'none' }}>
