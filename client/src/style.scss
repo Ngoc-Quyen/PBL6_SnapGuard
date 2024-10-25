@@ -1,0 +1,79 @@
+$themes: (
+    light: (
+        textColor: #000,
+        bg: white,
+        bgPrimary: #dff7f5,
+        bgPrimarySoft: #d0f7f4,
+        logo: darkblue,
+        bgSoft: #f6f3f3,
+        textColorSoft: #616060,
+        border: lightgray,
+        bgBtn: #ff9f1c,
+    ),
+    dark: (
+        textColor: whitesmoke,
+        bg: #222,
+        bgPrimary: #222,
+        bgPrimarySoft: #3d3c3c,
+        logo: white,
+        bgSoft: #333,
+        textColorSoft: rgb(169, 168, 168),
+        border: #444,
+        bgBtn: #ff9f1c,
+    ),
+);
+
+@mixin themify($themes) {
+    @each $theme, $map in $themes {
+        .theme-#{$theme} & {
+            $theme-map: () !global;
+            @each $key, $submap in $map {
+                $value: map-get(map-get($themes, $theme), '#{$key}');
+                $theme-map: map-merge(
+                    $theme-map,
+                    (
+                        $key: $value,
+                    )
+                ) !global;
+            }
+            @content;
+            $theme-map: null !global;
+        }
+    }
+}
+
+@function themed($key) {
+    @return map-get($theme-map, $key);
+}
+
+@mixin mobile {
+    @media (max-width: 480px) {
+        @content;
+    }
+}
+@mixin tablet {
+    @media (max-width: 960px) {
+        @content;
+    }
+}
+.ml-4 {
+    margin-left: 18px;
+}
+.mr-6 {
+    margin-right: 6px;
+}
+.mb-2 {
+    margin-bottom: 2px;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.font-size-18 {
+    font-size: 18px;
+}
+
+.error-message {
+    color: red; /* Màu chữ */
+    text-align: center; /* Canh giữa chữ */
+    margin-top: 10px; /* Khoảng cách phía trên */
+}

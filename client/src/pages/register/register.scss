@@ -1,0 +1,129 @@
+@use '../../style' as *;
+.register {
+    height: 100vh;
+    background-color: #dff7f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .card {
+        width: auto;
+        display: flex;
+        border-radius: 10px;
+        min-height: 600px;
+        overflow: hidden;
+        gap: 10px;
+        .left {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            max-width: 500px;
+            gap: 20px;
+            color: white;
+            h1 {
+                font-size: 100px;
+                line-height: 100px;
+            }
+
+            p {
+                font-size: 18px;
+                width: 100%;
+                color: #000;
+            }
+            .question-login {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                gap: 10px;
+                span {
+                    font-size: 15px;
+                    color: #000;
+                    font-weight: 500;
+                }
+                button {
+                    width: 100%;
+                    padding: 10px;
+                    border: none;
+                    border-radius: 10px;
+                    background-color: #ff9f1c;
+                    color: rgb(255, 255, 255);
+                    font-weight: bold;
+                    font-size: 15px;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .right {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            justify-content: center;
+            border-radius: 20px;
+            background-color: #ffff;
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+            height: 500px;
+            margin: 10px;
+            h1 {
+                color: #555;
+            }
+            Form {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+                .input-item {
+                    border-bottom: 1px solid lightgray;
+                    input {
+                        border: none;
+                        padding: 10px 15px;
+                        font-size: 15px;
+                    }
+                    input:focus {
+                        outline: none; /* Tắt đường viền mặc định */
+                    }
+                    .fa-eye,
+                    .fa-eye-slash {
+                        cursor: pointer; /* Thay đổi con trỏ khi hover */
+                    }
+                    .errorMessage {
+                        color: red;
+                    }
+                }
+
+                button {
+                    width: 100%;
+                    padding: 10px;
+                    border: none;
+                    border-radius: 10px;
+                    background-color: #2db6aa;
+                    color: white;
+                    font-weight: bold;
+                    cursor: pointer;
+                    font-size: 15px;
+                }
+            }
+        }
+        .footer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            button {
+                width: auto;
+                background-color: #2db6aa;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 10px;
+                color: #dff7f5;
+            }
+            button:hover {
+                cursor: pointer;
+                color: white;
+                font-weight: 700px;
+                font-size: 14px;
+            }
+        }
+    }
+}

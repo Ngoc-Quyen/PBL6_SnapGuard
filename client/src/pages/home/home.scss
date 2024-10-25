@@ -1,0 +1,40 @@
+@use '../../style' as *;
+
+.home {
+    @include themify($themes) {
+        padding: 20px 30px 20px 70px;
+        background-color: themed('bgPrimary');
+
+        @include mobile {
+            padding: 10px;
+        }
+
+        @include tablet {
+            padding: 20px;
+        }
+    }
+    display: flex;
+    gap: 20px;
+    .left {
+        flex: 6;
+        .item {
+            .fa-image {
+                color: rgb(26, 186, 11);
+                font-size: 20px;
+            }
+            .fa-map-location-dot {
+                color: rgb(3, 3, 165);
+                font-size: 20px;
+            }
+            .fa-face-laugh-beam {
+                color: rgb(198, 198, 8);
+                font-size: 20px;
+            }
+        }
+    }
+    .right {
+        margin-left: 10px;
+        flex: 3;
+        position: sticky;
+    }
+}

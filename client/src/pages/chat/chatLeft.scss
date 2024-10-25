@@ -1,0 +1,145 @@
+@use '../../style' as *;
+.chat-left {
+    @include themify($themes) {
+        flex: 1.5;
+        position: sticky;
+        height: 86vh;
+        background-color: themed('bg');
+        color: themed('textColor');
+
+        @include mobile {
+            display: none;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        border-radius: 10px;
+        // width: 100px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            // margin-bottom: 20px;
+            height: 10%;
+            .title {
+                margin: 0px;
+                font-size: 28px;
+            }
+            .menu {
+                border-radius: 50%;
+                background-color: themed('bgSoft');
+                width: 40px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                i {
+                    font-size: 20px;
+                }
+            }
+        }
+        .search {
+            padding: 10px 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background-color: themed('bgSoft');
+            margin: 5px 0px;
+            border-radius: 20px;
+            cursor: pointer;
+            height: 20px;
+            width: 90%;
+            input {
+                border: none;
+                font-size: 15px;
+                background-color: transparent;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+
+        .item {
+            flex-grow: 1; // Để phần item sử dụng không gian còn lại
+            overflow-y: auto; // Cho phép cuộn dọc
+            max-height: calc(100% - (10% + 20px));
+
+            /* Thanh cuộn cho Chrome, Safari và các trình duyệt dựa trên WebKit */
+            &::-webkit-scrollbar {
+                width: 8px; // Chiều rộng thanh cuộn
+            }
+            &::-webkit-scrollbar-thumb {
+                background: #c1bfbf; // Màu của thanh cuộn
+                border-radius: 10px; // Bo góc thanh cuộn
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background: #a6a6a6; // Màu khi hover
+            }
+            .item-chat {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+                padding: 10px 0px;
+                box-sizing: border-box;
+                &:hover {
+                    background-color: themed('bgSoft');
+                    cursor: pointer;
+                    border-radius: 10px;
+                }
+                .item-avata {
+                    width: 50px;
+                    height: 50px;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: 50%;
+                    }
+                }
+
+                .item-info {
+                    margin-bottom: 10px;
+                    .item-name {
+                        margin: 0;
+                        font-size: 15px;
+                        font-weight: 600;
+                    }
+                    .item-detail {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-top: 5px;
+                        .item-content {
+                            margin: 0;
+                            white-space: nowrap; /* Giữ nội dung trên một dòng */
+                            overflow: hidden; /* Ẩn phần vượt quá */
+                            text-overflow: ellipsis; /* Thêm dấu "..." nếu văn bản quá dài */
+                            max-width: 150px;
+                            font-size: 13px;
+                        }
+                        .time {
+                            font-size: 13px;
+
+                            &::before {
+                                content: '•'; /* Thêm dấu chấm trước thời gian */
+                                margin: 0 4px; /* Khoảng cách giữa dấu chấm và các phần tử */
+                                font-size: 13px; /* Đảm bảo dấu chấm có kích thước phù hợp */
+                                color: #999; /* Màu cho dấu chấm, bạn có thể điều chỉnh */
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

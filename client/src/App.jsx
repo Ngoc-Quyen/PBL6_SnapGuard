@@ -1,36 +1,100 @@
-// import './App.css';
-import './index.css';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import HomeGuess from './pages/homes/index';
-import LogIn from './pages/authPage/index';
-import HomeLayout from './pages/HomeLayout';
-import LoginModal from './components/LoginModal';
-import NavbarUser from './components/NavbarUser';
-import Dashboard from './pages/homes/Dashboard';
-
-const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <HomeLayout />,
-        children: [
-            {
-                index: true,
-                // element: <HomeGuess />,
-                element: <Dashboard />,
-            },
-            {
-                path: 'login',
-                element: <LogIn />,
-            },
-            {
-                path: 'sign-up',
-                element: <LoginModal />,
-            },
-        ],
-    },
-]);
+import Login from './pages/login/Login';
+import Register from './pages/register/Register';
+import { createBrowserRouter, RouterProvider, Route, Outlet, Navigate, useLocation } from 'react-router-dom';
+import Navbar from './components/navbar/Navbar';
+import LeftBar from './components/leftBar/LeftBar';
+import RightBar from './components/rightBar/RightBar';
+import Home from './pages/home/Home';
+import Profile from './pages/profile/Profile';
+import './style.scss';
+import { useContext } from 'react';
+import { DarkModeContext } from './context/darkModeContext';
+import { AuthContext } from './context/authContext';
+import { useAuth } from './hooks/useAuth';
+import Friends from './pages/friends/Friends';
+import ChatFull from './pages/chat/ChatFull';
+import ChatLeft from './pages/chat/ChatLeft';
+import ChatDetail from './pages/chat/ChatDetail';
+import MyProfile from './pages/profile/MyProfile';
 function App() {
-    return <RouterProvider router={router} />;
+    const { currentUser } = useAuth();
+
+    const { darkMode } = useContext(DarkModeContext);
+
+    const Layout = () => {
+        const location = useLocation(); // Lấy pathname hiện tại
+        return (
+            <div className={`theme-${darkMode ? 'dark' : 'light'}`}>
+                <Navbar />
+                <div style={{ display: 'flex' }}>
+                    {location.pathname === '/chat' ? <ChatLeft /> : <LeftBar />}
+                    <div style={{ flex: 6 }}>
+                        <Outlet />
+                    </div>
+                    {/* <RightBar /> */}
+                </div>
+            </div>
+        );
+    };
+
+    const ProtectedRoute = ({ children }) => {
+        if (!currentUser) {
+            return <Navigate to="/login" />;
+        }
+
+        return children;
+    };
+
+    const router = createBrowserRouter([
+        {
+            path: '/',
+            element: (
+                <ProtectedRoute>
+                    <Layout />
+                </ProtectedRoute>
+            ),
+            children: [
+                {
+                    path: '/',
+                    element: <Home />,
+                },
+                {
+                    path: '/profile/:id',
+                    element: <Profile />,
+                },
+                {
+                    path: '/friends',
+                    element: <Friends />,
+                },
+                {
+                    path: '/chat',
+                    element: <ChatFull />,
+                },
+                {
+                    path: '/chat/:id',
+                    element: <ChatDetail />,
+                },
+                {
+                    path: '/:id',
+                    element: <MyProfile />,
+                },
+            ],
+        },
+        {
+            path: '/login',
+            element: <Login />,
+        },
+        {
+            path: '/register',
+            element: <Register />,
+        },
+    ]);
+
+    return (
+        <div>
+            <RouterProvider router={router} />
+        </div>
+    );
 }
 
 export default App;
