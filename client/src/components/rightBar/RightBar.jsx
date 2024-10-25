@@ -39,8 +39,8 @@ const RightBar = ({ linkAPI }) => {
                         listFriends.map((friend) => (
                             <div className="user">
                                 <div className="userInfo">
-                                    <img src={friend.recipientAvatar} alt="" />
-                                    <span>{friend.recipientName}</span>
+                                    <img src={friend.senderAvatar} alt="" />
+                                    <span>{friend.senderName}</span>
                                 </div>
                                 <div className="buttons">
                                     <button>Đồng ý</button>

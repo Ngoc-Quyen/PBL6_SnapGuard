@@ -15,11 +15,11 @@ const Post = ({ post, onDeleteSuccess }) => {
     const [openModal, setOpenModal] = useState(false);
     const [comment_count, setCommentCount] = useState(post.comment_count);
     const [like_count, setLikeCount] = useState(post.like_count);
+    const [liked, setLiked] = useState(false);
 
     const closeModalPost = () => {
         setOpenModal(!openModal); // Đóng ModalPost khi cần
     };
-    const [liked, setLiked] = useState(false);
 
     const onLike = async () => {
         const response = await axios.get(`${API_ENDPOINT}/posts/${post.post_id}/likes`, {
@@ -28,28 +28,33 @@ const Post = ({ post, onDeleteSuccess }) => {
             },
         });
         const listUserLike = response.data.users;
-        listUserLike.map((user) => {
+        listUserLike.forEach((user) => {
             if (user.username === currentUser.username) {
                 setLiked(true);
             }
         });
     };
+
     const clickLike = async () => {
-        const response = await axios.post(`${API_ENDPOINT}/posts/${post.post_id}/like`, {
+        const response = await axios.post(`${API_ENDPOINT}/posts/${post.post_id}/like`, null, {
             headers: {
                 Authorization: `Bearer ${storedToken}`,
             },
         });
         setLikeCount(response.data.like_count);
     };
-    const handelClikLiked = () => {
+
+    const handleClickLiked = () => {
         setLiked(!liked);
         clickLike();
     };
+
     const timeDifference = calculateTimeDifference(post.created_at);
+
     useEffect(() => {
         onLike();
     }, [post]);
+
     return (
         <div className="post">
             <div className="container">
@@ -61,7 +66,6 @@ const Post = ({ post, onDeleteSuccess }) => {
                                 <span className="name">{post.user.full_name}</span>
                             </Link>
                             <span className="date">{timeDifference}</span>
-                            <span className="date">{timeDifference}</span>
                         </div>
                     </div>
                     <div
@@ -70,39 +74,29 @@ const Post = ({ post, onDeleteSuccess }) => {
                             setOpenModal(!openModal);
                         }}
                     >
-                        <i class="fas fa-ellipsis-h font-size-18"></i>
-                    </div>
-                    {openModal && <ModalPost post={post} onClose={closeModalPost} onDeleteSuccess={onDeleteSuccess} />}
-                    <div
-                        className="btn-menu"
-                        onClick={() => {
-                            setOpenModal(!openModal);
-                        }}
-                    >
-                        <i class="fas fa-ellipsis-h font-size-18"></i>
+                        <i className="fas fa-ellipsis-h font-size-18"></i>
                     </div>
                     {openModal && <ModalPost post={post} onClose={closeModalPost} onDeleteSuccess={onDeleteSuccess} />}
                 </div>
                 <div className="content">
                     <p dangerouslySetInnerHTML={{ __html: post.content }}></p>
-                    <p dangerouslySetInnerHTML={{ __html: post.content }}></p>
                     <img src={post.image_url} alt="" />
                 </div>
                 <div className="info">
-                    <div className="item" onClick={handelClikLiked}>
+                    <div className="item" onClick={handleClickLiked}>
                         {liked ? (
-                            <i class="fas fa-heart font-size-18" style={{ color: 'red' }}></i>
+                            <i className="fas fa-heart font-size-18" style={{ color: 'red' }}></i>
                         ) : (
-                            <i class="far fa-heart font-size-18"></i>
+                            <i className="far fa-heart font-size-18"></i>
                         )}
                         {like_count} Likes
                     </div>
                     <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
-                        <i class="fas fa-comments font-size-18"></i>
+                        <i className="fas fa-comments font-size-18"></i>
                         {comment_count} Comments
                     </div>
                     <div className="item">
-                        <i class="fas fa-share font-size-18"></i>
+                        <i className="fas fa-share font-size-18"></i>
                         Share
                     </div>
                 </div>

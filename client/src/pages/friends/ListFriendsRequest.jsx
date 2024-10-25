@@ -50,7 +50,7 @@ const ListFriendsRequest = ({ linkAPI }) => {
             </div>
             <div className="show-list">
                 {listFriends.slice(0, visibleCount).map((friend) => (
-                    <Friend key={friend.requestId} name={friend.recipientName} avata={friend.recipientAvatar} />
+                    <Friend key={friend.requestId} name={friend.senderName} avata={friend.senderAvatar} />
                 ))}
             </div>
 
