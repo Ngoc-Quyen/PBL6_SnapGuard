@@ -91,9 +91,7 @@
 //             return { success: false, message: error.message };
 //         }
 
-
 //     };
-
 
 //     const updateAvatar = (newAvatarUrl) => {
 //         setCurrentUser((prevUser) => ({
@@ -128,8 +126,6 @@
 //         </AuthContext.Provider>
 //     );
 // };
-
-
 
 import axios from 'axios';
 import { createContext, useEffect, useState } from 'react';
@@ -170,20 +166,18 @@ export const AuthContextProvider = ({ children }) => {
             // Kết nối socket khi login thành công
             const socketConnection = io(API_ENDPOINT, {
                 query: { userId: user.id },
-
             });
             socketConnection.connect();
 
             setSocket(socketConnection);
 
             // Lắng nghe sự kiện connectSuccess
-            socketConnection.on("connectSuccess", (data) => {
-                console.log("Server message:", data.message); // Hiển thị tin nhắn từ server
+            socketConnection.on('connectSuccess', (data) => {
+                console.log('Server message:', data.message); // Hiển thị tin nhắn từ server
             });
 
             // Lắng nghe sự kiện connect thành công
             socketConnection.on('connect', () => {
-                console.log('Socket connected: ', socketConnection.id);
                 setIsConnected(true); // Cập nhật trạng thái kết nối
             });
 

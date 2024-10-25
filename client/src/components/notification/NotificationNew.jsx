@@ -2,20 +2,50 @@ import React, { useState } from 'react';
 import './notification.scss';
 import { Link } from 'react-router-dom';
 import { calculateTimeDifference } from '../../utils/calculateTimeDifference ';
+import axios from 'axios';
 
-const NotificationNew = ({ notifi }) => {
+const NotificationNew = ({ notifi, handleListNotifine }) => {
+    const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+    const storedToken = localStorage.getItem('token');
+
+    const checkRead = async () => {
+        try {
+            const response = await axios.patch(`${API_ENDPOINT}/notification/${notifi.id}/read`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                },
+            });
+            return response.data.is_read;
+        } catch (error) {
+            console.log('🚀 ~ checkRead ~ error:', error);
+        }
+    };
     const [checkSeen, setCheckSeen] = useState(false);
     const [bell, setBell] = useState(false);
-
+    const handleCheckRead = async () => {
+        const result = await checkRead();
+        if (result) {
+            await handleListNotifine();
+            console.log('đã click');
+        }
+    };
     return (
-        <div className="item-chat">
+        <div
+            className="item-chat"
+            onClick={() => {
+                handleCheckRead();
+            }}
+        >
             <div className="item-avata">
+                <img src={notifi.sender.avatar_url} alt="" />
                 <img src={notifi.sender.avatar_url} alt="" />
             </div>
             <div className="item-content">
                 <p className="content cl-text">
                     <span className="name">{notifi.sender.full_name}</span> {notifi.content}
+                    <span className="name">{notifi.sender.full_name}</span> {notifi.content}
                 </p>
+                <span className="time cl-blue">{calculateTimeDifference(notifi.created_at)}</span>
                 <span className="time cl-blue">{calculateTimeDifference(notifi.created_at)}</span>
             </div>
 
