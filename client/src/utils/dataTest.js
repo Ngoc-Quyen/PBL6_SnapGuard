@@ -138,20 +138,6 @@ export const listFriendChat = [
         content: 'Lê Thị B đã gửi 1 video',
         time: '10 phút',
     },
-    {
-        id: 9,
-        full_name: 'Phạm Văn C',
-        avatar_url: 'https://i.pinimg.com/736x/b5/d5/56/b5d556f5831efc240353b3f452cbb6f2.jpg',
-        content: 'Phạm Văn C đã gửi 3 ảnh',
-        time: '15 phút',
-    },
-    {
-        id: 10,
-        full_name: 'Trần Văn D',
-        avatar_url: 'https://i.pinimg.com/736x/08/74/10/087410b230422194ef8d5e40a6859ad2.jpg',
-        content: 'Trần Văn D đã gửi 1 tài liệu',
-        time: '20 phút',
-    },
 ];
 
 export const listNotification = [

@@ -21,6 +21,7 @@
         "@testing-library/user-event": "^14.5.2",
         "axios": "^1.7.7",
         "babel-plugin-styled-components": "^2.1.4",
+        "date-fns": "^4.1.0",
         "dayjs": "^1.11.13",
         "formik": "^2.4.6",
         "global": "^4.4.0",

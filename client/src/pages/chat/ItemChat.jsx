@@ -1,24 +1,40 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { vi } from 'date-fns/locale';
 import './chatLeft.scss';
 
 const ItemChat = (props) => {
     const [checkSeen, setCheckSeen] = useState(false);
     const [bell, setBell] = useState(false);
-    return (
-        <div className="item-chat">
-            <div className="item-avata">
-                <img src={props.user.avatar_url} alt="" />
-            </div>
-            <div className="item-info">
-                <h4 className="item-name">{props.user.full_name}</h4>
-                <div className="item-detail">
-                    <p className="item-content">{props.user.content}</p>
-                    <span className="time">{props.user.time}</span>
-                </div>
-            </div>
 
-            <div className="modal-menu" style={{ display: 'none' }}>
+    // Chuyển đổi timestamp thành đối tượng Date
+    const parsedTime = parseISO(props.user.time);
+
+    // Tính toán thời gian tương đối
+    const timeAgo = formatDistanceToNow(parsedTime, {
+        addSuffix: true,
+        locale: vi,
+    });
+
+    return (
+        <Link to={`/chat/${props.user.id}`} className="link-item-chat">
+            <div className="item-chat">
+                <div className="item-avata">
+                    <img
+                        src={props.user.avatar || 'https://i.imgur.com/q3mEf9u.jpeg'}
+                        alt={`${props.user.name || 'Unknown User'} Avatar`}
+                    />
+                </div>
+                <div className="item-info">
+                    <h4 className="item-name">{props.user.name}</h4>
+                    <div className="item-detail">
+                        <p className="item-content">{props.user.content}</p>
+                        <span className="time">{timeAgo}</span>
+                    </div>
+                </div>
+
+                {/* <div className="modal-menu" style={{ display: 'none' }}>
                 <div className="check-seen" onClick={() => setCheckSeen(!checkSeen)}>
                     {checkSeen ? (
                         <>
@@ -61,8 +77,10 @@ const ItemChat = (props) => {
                     <i class="fas fa-archive"></i>
                     Lưu trữ đoạn chat
                 </Link>
+            </div> */}
+
             </div>
-        </div>
+        </Link>
     );
 };
 

@@ -1,4 +1,5 @@
 @use '../../style' as *;
+
 .chat {
     @include themify($themes) {
         background-color: themed('bgPrimary');
@@ -12,44 +13,64 @@
             display: none;
         }
 
-        border-radius: 10px;
+        // border-radius: 10px;
         // padding: 10px 20px;
-        height: 88vh;
+        height: 90vh;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        // margin-top: 10px;
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
-            .info-user {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 5px 10px;
-                &:hover {
-                    background-color: themed('bgPrimarySoft');
-                    border-radius: 10px;
-                    cursor: pointer;
+            border-bottom: 2px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+            .link-detail-chat {
+                text-decoration: none;
+                color: inherit;
+
+                * {
+                    text-decoration: inherit;
                 }
-                .avata {
-                    width: 40px;
-                    height: 40px;
-                    img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                        border-radius: 50%;
+
+                .info-user {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 5px 10px;
+
+
+                    &:hover {
+                        background-color: themed('bgPrimarySoft');
+                        border-radius: 10px;
+                        cursor: pointer;
+                    }
+
+                    .avata {
+                        width: 40px;
+                        height: 40px;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            border-radius: 50%;
+                        }
+                    }
+
+                    .name {
+                        font-size: 18px;
+                        font-weight: 600;
+                        margin: 10px;
                     }
                 }
-                .name {
-                    font-size: 18px;
-                    font-weight: 600;
-                    margin: 10px;
-                }
             }
+
+
             .info-detail {
                 margin-right: 10px;
                 width: 40px;
@@ -57,9 +78,11 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+
                 i {
                     font-size: 20px;
                 }
+
                 &:hover {
                     cursor: pointer;
                     background-color: themed('bgPrimarySoft');
@@ -70,11 +93,46 @@
 
         .container {
             padding: 10px 20px;
-        }
-        .footer {
+            flex-grow: 1; // Để khung này chiếm khoảng trống giữa header và footer
+            overflow-y: auto; // Cuộn khi có nhiều tin nhắn
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 10px;
+
+            .message {
+                max-width: 60%; // Giới hạn chiều rộng của tin nhắn
+                padding: 10px;
+                border-radius: 10px;
+                font-size: 16px;
+
+                &.left {
+                    align-self: flex-start;
+                    background-color: #F6F3F3;
+                    color: #000;
+                }
+
+                &.right {
+                    align-self: flex-end;
+                    background-color: #0078ff;
+                    color: #fff;
+                }
+
+                p {
+                    margin: 0;
+                    word-wrap: break-word;
+                }
+
+                img {
+                    max-width: 100%; // Đảm bảo ảnh không vượt quá chiều rộng của tin nhắn
+                    height: auto; // Tự động điều chỉnh chiều cao của ảnh theo tỷ lệ
+                    border-radius: 10px; // Bo góc ảnh để giống với góc tin nhắn
+                    margin-top: 5px; // Khoảng cách giữa văn bản và ảnh
+                }
+            }
+        }
+
+        .footer {
+
             .image-preview-container {
                 display: flex;
                 align-items: center;
@@ -82,12 +140,13 @@
                 max-width: 1124px; // Đảm bảo khung không vượt quá component cha
                 overflow-x: auto; // Kích hoạt cuộn ngang khi cần
                 white-space: nowrap; // Đảm bảo tất cả ảnh nằm trên một dòng
-                padding-bottom: 5px;
+                padding: 5px;
 
                 &::-webkit-scrollbar {
                     width: 8px; // Chiều rộng thanh cuộn
                     height: 10px;
                 }
+
                 &::-webkit-scrollbar-thumb {
                     background: #727474; // Màu của thanh cuộn
                     border-radius: 10px; // Bo góc thanh cuộn
@@ -96,10 +155,14 @@
                 &::-webkit-scrollbar-thumb:hover {
                     background: #505150; // Màu khi hover
                 }
+
                 &::-webkit-scrollbar-track {
-                    background: #aeaeae; /* Màu nền của thanh cuộn */
-                    border-radius: 10px; /* Bo góc cho nền */
+                    background: #aeaeae;
+                    /* Màu nền của thanh cuộn */
+                    border-radius: 10px;
+                    /* Bo góc cho nền */
                 }
+
                 .image-preview {
                     flex-shrink: 0; // Đảm bảo ảnh không co lại
                     width: 100px; // Đặt width cố định cho mỗi ảnh
@@ -108,92 +171,98 @@
                     display: flex;
                     gap: 10px;
                     margin-top: 10px;
+
                     img {
                         width: 100%;
                         // height: 100%;
                         border-radius: 10px;
                         object-fit: cover;
                     }
+
                     i {
                         margin-left: -15px;
                         margin-top: -6px;
                     }
                 }
             }
+
             .input-send {
                 display: flex;
                 justify-content: space-between;
-                align-items: end;
-                gap: 10px;
-                // background-color: #d0f7f4;
+                align-items: center;
                 padding: 10px;
-                box-sizing: border-box;
-                border-radius: 20px;
+                background-color: themed('bgPrimary');
+                border-radius: 5px;
+                gap: 10px;
+
                 .input {
-                    width: 100%;
                     display: flex;
-                    align-items: end;
-                    // background-color: themed('bgPrimarySoft');
-                    border-radius: 10px;
+                    align-items: center;
+                    width: 100%; // Đảm bảo input chiếm full chiều rộng container
+                    gap: 10px;
+
+                    .btn-img,
+                    .send {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 40px; // Đảm bảo icon không bị co giãn
+                        height: 40px;
+                        border-radius: 50%;
+                        background-color: #ffffff;
+                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                        cursor: pointer;
+
+                        i {
+                            font-size: 20px;
+                            color: #6c757d;
+                        }
+
+                        &:hover {
+                            background-color: #f1f3f5;
+
+                            i {
+                                color: #495057;
+                            }
+                        }
+                    }
 
                     .input-textarea {
-                        position: relative;
-                        width: 100%;
-                        font-size: 18px;
-                        background-color: transparent;
-                        max-height: 100px;
-                        box-sizing: border-box;
-                        resize: none;
-                        color: themed('textColorSoft');
-                        border: 1.5px solid rgb(109, 107, 107);
+                        flex-grow: 1;
+                        font-size: 16px;
+                        padding: 10px 15px;
+                        border: 1px solid #ddd;
                         border-radius: 20px;
-                        padding: 10px 60px 10px 15px;
+                        resize: none;
+                        box-sizing: border-box;
+                        min-height: 40px;
+                        max-height: 100px;
+
                         &:focus {
-                            border-radius: 20px;
-                            border: 2px solid rgb(109, 107, 107);
-                        }
-                        &:focus-visible {
                             outline: none;
+                            border: 1.5px solid #6c757d;
+                        }
+
+                        &::placeholder {
+                            color: #adb5bd;
                         }
 
                         &::-webkit-scrollbar {
-                            width: 9px; // Chiều rộng thanh cuộn
+                            width: 5px;
                         }
+
                         &::-webkit-scrollbar-thumb {
-                            background: #727474; // Màu của thanh cuộn
-                            border-radius: 10px; // Bo góc thanh cuộn
+                            background-color: #6c757d;
+                            border-radius: 10px;
                         }
 
                         &::-webkit-scrollbar-thumb:hover {
-                            background: #505150; // Màu khi hover
-                        }
-                        &::-webkit-scrollbar-track {
-                            background: #aeaeae; /* Màu nền của thanh cuộn */
-                            border-radius: 10px; /* Bo góc cho nền */
+                            background-color: #495057;
                         }
                     }
-                    .btn-icon {
-                        position: absolute;
-                        right: 60px;
-                        bottom: 30px;
-                        cursor: pointer;
-                        margin-left: 10px;
-                        i {
-                            font-size: 20px;
-                        }
-                    }
-                    .btn-img {
-                        margin-right: 15px;
-                        margin-left: 5px;
-                        i {
-                            font-size: 20px;
-                        }
-                    }
-                }
-                .send {
-                    cursor: pointer;
                 }
             }
+
         }
     }
 }
