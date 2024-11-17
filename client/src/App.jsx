@@ -23,11 +23,12 @@ function App() {
 
     const Layout = () => {
         const location = useLocation(); // Lấy pathname hiện tại
+        const isChatPage = location.pathname.startsWith('/chat');
         return (
             <div className={`theme-${darkMode ? 'dark' : 'light'}`}>
                 <Navbar />
                 <div style={{ display: 'flex' }}>
-                    {location.pathname === '/chat' ? <ChatLeft /> : <LeftBar />}
+                    {isChatPage ? <ChatLeft /> : <LeftBar />}
                     <div style={{ flex: 6 }}>
                         <Outlet />
                     </div>
