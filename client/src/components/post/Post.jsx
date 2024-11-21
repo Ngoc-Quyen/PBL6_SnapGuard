@@ -1,22 +1,22 @@
 import './post.scss';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
-import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { Link } from 'react-router-dom';
 import Comments from '../comments/Comments';
 import { useState } from 'react';
+import { calculateTimeDifference } from '../../utils/calculateTimeDifference ';
+import ModalPost from './ModalPost';
 
-const Post = ({ post }) => {
+const Post = ({ post, onDeleteSuccess }) => {
     const [commentOpen, setCommentOpen] = useState(false);
-
+    const [openModal, setOpenModal] = useState(false);
+    const closeModalPost = () => {
+        setOpenModal(!openModal); // Đóng ModalPost khi cần
+    };
     //TEMPORARY
     const [liked, setLiked] = useState(false);
     const handelClikLiked = () => {
         setLiked(!liked);
     };
-
+    const timeDifference = calculateTimeDifference(post.created_at);
     return (
         <div className="post">
             <div className="container">
@@ -27,13 +27,21 @@ const Post = ({ post }) => {
                             <Link to={`/profile/${post.user.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <span className="name">{post.user.full_name}</span>
                             </Link>
-                            <span className="date">1 min ago</span>
+                            <span className="date">{timeDifference}</span>
                         </div>
                     </div>
-                    <MoreHorizIcon />
+                    <div
+                        className="btn-menu"
+                        onClick={() => {
+                            setOpenModal(!openModal);
+                        }}
+                    >
+                        <i class="fas fa-ellipsis-h font-size-18"></i>
+                    </div>
+                    {openModal && <ModalPost post={post} onClose={closeModalPost} onDeleteSuccess={onDeleteSuccess} />}
                 </div>
                 <div className="content">
-                    <p>{post.content}</p>
+                    <p dangerouslySetInnerHTML={{ __html: post.content }}></p>
                     <img src={post.image_url} alt="" />
                 </div>
                 <div className="info">
@@ -43,18 +51,18 @@ const Post = ({ post }) => {
                         ) : (
                             <i class="far fa-heart font-size-18"></i>
                         )}
-                        12 Likes
+                        {post.like_count} Likes
                     </div>
                     <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
                         <i class="fas fa-comments font-size-18"></i>
-                        12 Comments
+                        {post.comment_count} Comments
                     </div>
                     <div className="item">
                         <i class="fas fa-share font-size-18"></i>
                         Share
                     </div>
                 </div>
-                {commentOpen && <Comments />}
+                {commentOpen && <Comments comments={post.comments} postId={post.post_id} />}
             </div>
         </div>
     );

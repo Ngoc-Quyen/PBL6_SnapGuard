@@ -43,7 +43,6 @@
                     align-items: center;
                     padding: 5px 10px;
 
-
                     &:hover {
                         background-color: themed('bgPrimarySoft');
                         border-radius: 10px;
@@ -69,7 +68,6 @@
                     }
                 }
             }
-
 
             .info-detail {
                 margin-right: 10px;
@@ -107,7 +105,7 @@
 
                 &.left {
                     align-self: flex-start;
-                    background-color: #F6F3F3;
+                    background-color: #f6f3f3;
                     color: #000;
                 }
 
@@ -132,7 +130,6 @@
         }
 
         .footer {
-
             .image-preview-container {
                 display: flex;
                 align-items: center;
@@ -262,7 +259,6 @@
                     }
                 }
             }
-
         }
     }
 }

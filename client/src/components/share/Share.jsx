@@ -4,7 +4,7 @@ import { AuthContext } from '../../context/authContext';
 import ModalPost from './ModalPost';
 import useClickOutSide from '../../hooks/useClickOutSide';
 
-const Share = () => {
+const Share = ({ onPostCreated }) => {
     const { currentUser } = useContext(AuthContext);
     const [file, setFile] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +39,7 @@ const Share = () => {
                                 src={currentUser.avatar_url}
                                 userName={currentUser.full_name}
                                 onClose={closeModal}
+                                onPostCreated={onPostCreated}
                             />
                         )}
                     </div>

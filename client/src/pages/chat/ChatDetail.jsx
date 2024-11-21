@@ -4,7 +4,6 @@ import { Link, useParams } from 'react-router-dom';
 import './chat.scss';
 
 const ChatDetail = () => {
-
     const { id } = useParams();
     const fileInputRef = useRef(null);
     const textareaRef = useRef(null);
@@ -36,8 +35,8 @@ const ChatDetail = () => {
 
                 // Sắp xếp tin nhắn theo thời gian
                 const sortedMessages = [
-                    ...data.right.messages.map(msg => ({ ...msg, sender: "me" })),
-                    ...data.left.messages.map(msg => ({ ...msg, sender: "other" }))
+                    ...data.right.messages.map((msg) => ({ ...msg, sender: 'me' })),
+                    ...data.left.messages.map((msg) => ({ ...msg, sender: 'other' })),
                 ].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
                 setMessages(sortedMessages);
@@ -49,10 +48,9 @@ const ChatDetail = () => {
         fetchChatDetail();
     }, [id]);
 
-
     useEffect(() => {
         if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [messages]);
 
@@ -74,7 +72,6 @@ const ChatDetail = () => {
     };
 
     const handleIconClick = () => {
-
         fileInputRef.current.click();
     };
 
@@ -85,7 +82,7 @@ const ChatDetail = () => {
             formData.append('content', chat);
 
             // Thêm ảnh nếu có
-            images.forEach(image => {
+            images.forEach((image) => {
                 formData.append('image', image);
             });
 
@@ -102,8 +99,8 @@ const ChatDetail = () => {
                         id: messages.length + 1,
                         content: chat,
                         timestamp: new Date().toISOString(),
-                        sender: "me",
-                        imageUrl: images.length > 0 ? URL.createObjectURL(images[0]) : "",
+                        sender: 'me',
+                        imageUrl: images.length > 0 ? URL.createObjectURL(images[0]) : '',
                     };
 
                     // Thêm tin nhắn mới vào danh sách và sắp xếp lại
@@ -126,13 +123,10 @@ const ChatDetail = () => {
         }
     };
 
-
     const handleRemoveImage = (index) => {
         setImages((prevImages) => prevImages.filter((_, i) => i !== index));
         setPreviewImages((prevPreviewImages) => prevPreviewImages.filter((_, i) => i !== index));
     };
-
-
 
     return (
         <div className="chat">
@@ -154,10 +148,7 @@ const ChatDetail = () => {
             </div>
             <div className="container">
                 {messages.map((message) => (
-                    <div
-                        key={message.id}
-                        className={`message ${message.sender === "me" ? "right" : "left"}`}
-                    >
+                    <div key={message.id} className={`message ${message.sender === 'me' ? 'right' : 'left'}`}>
                         <p>{message.content}</p>
                         {message.imageUrl && <img src={message.imageUrl} alt="Ảnh đính kèm" />}
                     </div>
@@ -216,9 +207,3 @@ const ChatDetail = () => {
 };
 
 export default ChatDetail;
-
-
-
-
-
-

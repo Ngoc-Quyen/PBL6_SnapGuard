@@ -42,6 +42,13 @@ export const AuthContextProvider = ({ children }) => {
         // Nếu cần, xóa token trong header của axios
         delete axios.defaults.headers.common['Authorization'];
     };
+    const updateAvatar = (newAvatarUrl) => {
+        setCurrentUser((prevUser) => ({
+            ...prevUser,
+            avatar_url: newAvatarUrl,
+        }));
+        localStorage.setItem('user', JSON.stringify({ ...currentUser, avatar_url: newAvatarUrl }));
+    };
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -62,5 +69,9 @@ export const AuthContextProvider = ({ children }) => {
         }
     }, []);
 
-    return <AuthContext.Provider value={{ currentUser, register, login, logout }}>{children}</AuthContext.Provider>;
+    return (
+        <AuthContext.Provider value={{ currentUser, register, login, logout, updateAvatar }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
