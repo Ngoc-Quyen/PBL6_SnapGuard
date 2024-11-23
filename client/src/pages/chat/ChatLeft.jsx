@@ -25,6 +25,10 @@ const ChatLeft = () => {
         fetchChatsLeft();
     }, [API_ENDPOINT]);
 
+    const handleDeleteChat = (chatId) => {
+        setListFriendChat((prevChats) => prevChats.filter((chat) => chat.userId !== chatId));
+    };
+
     return (
         <div className="chat-left">
             <div className="header">
@@ -51,6 +55,7 @@ const ChatLeft = () => {
                                 content: user.lastMessage,
                                 time: user.timestamp,
                             }}
+                            onDelete={handleDeleteChat} // Truyền callback vào
                         />
                     ))
                 )}

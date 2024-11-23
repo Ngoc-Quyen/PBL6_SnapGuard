@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import './chat.scss';
+import { io } from "socket.io-client";
 
 const ChatDetail = () => {
 
@@ -18,6 +19,7 @@ const ChatDetail = () => {
 
     const [user, setUser] = useState({});
     const [messages, setMessages] = useState([]);
+
 
     useEffect(() => {
         const fetchChatDetail = async () => {
@@ -125,7 +127,6 @@ const ChatDetail = () => {
             alert('Vui lòng nhập bình luận hoặc chọn ảnh!');
         }
     };
-
 
     const handleRemoveImage = (index) => {
         setImages((prevImages) => prevImages.filter((_, i) => i !== index));

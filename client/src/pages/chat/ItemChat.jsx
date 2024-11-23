@@ -1,17 +1,60 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import axios from 'axios';
 import { vi } from 'date-fns/locale';
 import './chatLeft.scss';
 
 const ItemChat = (props) => {
-    const [checkSeen, setCheckSeen] = useState(false);
-    const [bell, setBell] = useState(false);
 
-    // Chuyển đổi timestamp thành đối tượng Date
+    const [isMenuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
     const parsedTime = parseISO(props.user.time);
 
-    // Tính toán thời gian tương đối
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // Kiểm tra nếu click ra ngoài menu
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside); // Lắng nghe sự kiện click
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside); // Dọn dẹp sự kiện khi component bị hủy
+        };
+    }, []);
+
+    const handleDeleteChat = async () => {
+        try {
+            const storedToken = localStorage.getItem('token');
+            const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT || 'https://pbl6-snapguard.onrender.com';
+
+            await axios.delete(`${API_ENDPOINT}/chat/${props.user.id}`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                },
+            });
+
+            onDelete(props.user.id); // Gọi callback để cập nhật danh sách bạn chat
+        } catch (error) {
+            console.error('Error deleting chat:', error);
+            alert('Xóa đoạn chat thất bại. Vui lòng thử lại!');
+        } finally {
+            closeMenu();
+        }
+    };
+
+    const toggleMenu = (e) => {
+        e.preventDefault(); // Ngăn chặn việc nhảy sang link khi bấm nút
+        setMenuOpen(!isMenuOpen);
+    };
+
+    const closeMenu = () => {
+        setMenuOpen(false);
+    };
+
     const timeAgo = formatDistanceToNow(parsedTime, {
         addSuffix: true,
         locale: vi,
@@ -34,51 +77,25 @@ const ItemChat = (props) => {
                     </div>
                 </div>
 
-                {/* <div className="modal-menu" style={{ display: 'none' }}>
-                <div className="check-seen" onClick={() => setCheckSeen(!checkSeen)}>
-                    {checkSeen ? (
-                        <>
-                            <i class="far fa-envelope"></i>
-                            <span className="menu-content">Đánh dấu chưa đọc</span>
-                        </>
-                    ) : (
-                        <>
-                            <i class="far fa-envelope-open"></i>
-                            <span className="menu-content">Đánh dấu đã đọc</span>
-                        </>
-                    )}
-                </div>
-                <div className="check-bell" onClick={() => setBell(!bell)}>
-                    {bell ? (
-                        <>
-                            <i class="far fa-bell-slash"></i>
-                            <span className="menu-content">Tắt thông báo</span>
-                        </>
-                    ) : (
-                        <>
-                            <i class="far fa-bell"></i>
-                            <span className="menu-content">Bật thông báo</span>
-                        </>
-                    )}
-                </div>
-                <Link className="profile" to={`/profile/${props.user.id}`}>
-                    <i class="far fa-user-circle"></i>
-                    Xem trang cá nhân
-                </Link>
-                <Link className="block">
-                    <i class="fas fa-user-lock"></i>
-                    Chặn
-                </Link>
-                <Link className="remove">
-                    <i class="far fa-trash-alt"></i>
-                    Xóa đoạn chat
-                </Link>
-                <Link className="save">
-                    <i class="fas fa-archive"></i>
-                    Lưu trữ đoạn chat
-                </Link>
-            </div> */}
 
+
+            </div>
+            <div className="menu-container" ref={menuRef}>
+                <button className="menu-toggle" onClick={toggleMenu}>
+                    <i className="fas fa-ellipsis-h"></i>
+                </button>
+                {isMenuOpen && (
+                    <div className="modal-menu">
+                        <Link className="profile" to={`/profile/${props.user.id}`} onClick={closeMenu}>
+                            <i className="far fa-user-circle"></i>
+                            Xem trang cá nhân
+                        </Link>
+                        <div className="remove" onClick={handleDeleteChat}>
+                            <i className="far fa-trash-alt"></i>
+                            Xóa đoạn chat
+                        </div>
+                    </div>
+                )}
             </div>
         </Link>
     );

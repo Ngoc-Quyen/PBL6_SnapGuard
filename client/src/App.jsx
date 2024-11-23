@@ -28,7 +28,7 @@ function App() {
             <div className={`theme-${darkMode ? 'dark' : 'light'}`}>
                 <Navbar />
                 <div style={{ display: 'flex' }}>
-                    {isChatPage ? <ChatLeft /> : <LeftBar />}
+                    {isChatPage ? <></> : <LeftBar />}
                     <div style={{ flex: 6 }}>
                         <Outlet />
                     </div>
