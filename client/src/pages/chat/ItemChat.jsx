@@ -77,8 +77,6 @@ const ItemChat = (props) => {
                     </div>
                 </div>
 
-
-
             </div>
             <div className="menu-container" ref={menuRef}>
                 <button className="menu-toggle" onClick={toggleMenu}>
@@ -96,6 +94,7 @@ const ItemChat = (props) => {
                         </div>
                     </div>
                 )}
+
             </div>
         </Link>
     );

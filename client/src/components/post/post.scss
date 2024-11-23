@@ -11,7 +11,7 @@
 
         .container {
             padding: 20px;
-
+            position: relative;
             .user {
                 display: flex;
                 align-items: center;
@@ -38,6 +38,115 @@
 
                         .date {
                             font-size: 12px;
+                        }
+                    }
+                }
+
+                .btn-menu {
+                    cursor: pointer;
+                }
+
+                .modal-post {
+                    padding: 10px 15px;
+                    background-color: themed('bgSoft');
+                    border-radius: 10px;
+                    position: absolute;
+                    right: 20px;
+                    top: 50px;
+                    .list-btn {
+                        list-style: none;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        padding: 0;
+                        margin: 0;
+                        .btn-item {
+                            display: flex;
+                            gap: 10px;
+                            align-items: center;
+                            margin: 5px;
+                            cursor: pointer;
+
+                            span {
+                                font-weight: 500;
+                            }
+                        }
+                    }
+                }
+
+                .modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 100;
+
+                    .modal {
+                        background: themed('bg');
+                        padding: 20px;
+                        border-radius: 8px;
+                        width: 600px;
+                        max-width: 90%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: right;
+                        max-height: 600px;
+                        .title-top {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding-bottom: 10px;
+                            border-bottom: 2px solid rgb(207, 204, 204);
+                            margin-bottom: 20px;
+                            .title {
+                                font-size: 25px;
+                                font-weight: 600;
+                                text-align: center;
+                                color: themed('textColorSoft');
+                                width: 100%;
+                            }
+                            .close-button {
+                                background: none;
+                                border: none;
+                                font-size: 1.5rem;
+                                cursor: pointer;
+                                i {
+                                    color: themed('textColorSoft');
+                                }
+                            }
+                        }
+                        .content {
+                            margin-top: 0;
+                        }
+                        .btn {
+                            display: flex;
+                            gap: 10px;
+                            justify-content: end;
+
+                            .btn-item {
+                                padding: 7px 15px;
+                                border-radius: 10px;
+                                font-weight: 500;
+                                font-size: 16px;
+                            }
+                            .btn-cancel:hover {
+                                background-color: themed('bgSoft');
+                                cursor: pointer;
+                            }
+                            .btn-delete {
+                                background-color: themed('bgBtn');
+                                padding: 7px 20px;
+
+                                &:hover {
+                                    cursor: pointer;
+                                    opacity: 0.8;
+                                }
+                            }
                         }
                     }
                 }
