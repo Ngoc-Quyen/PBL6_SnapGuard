@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import './chat.scss';
+import { io } from "socket.io-client";
 
 const ChatDetail = () => {
     const { id } = useParams();
@@ -17,6 +18,7 @@ const ChatDetail = () => {
 
     const [user, setUser] = useState({});
     const [messages, setMessages] = useState([]);
+
 
     useEffect(() => {
         const fetchChatDetail = async () => {
