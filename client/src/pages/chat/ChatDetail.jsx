@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import './chat.scss';
-import { io } from "socket.io-client";
+import { AuthContext } from '../../context/authContext'
 
 const ChatDetail = () => {
     const { id } = useParams();
@@ -19,6 +19,23 @@ const ChatDetail = () => {
     const [user, setUser] = useState({});
     const [messages, setMessages] = useState([]);
 
+    const { socket } = useContext(AuthContext); // Lấy socket từ AuthContext
+
+    useEffect(() => {
+        if (socket) {
+            socket.on('newMessage', (message) => {
+                console.log('New message received:', message);
+                setMessages((prevMessages) => {
+                    // Kiểm tra xem tin nhắn đã tồn tại trong danh sách chưa
+                    const messageExists = prevMessages.some((msg) => msg.id === message.id);
+                    if (!messageExists) {
+                        return [...prevMessages, message];
+                    }
+                    return prevMessages;
+                });
+            });
+        }
+    }, [socket]);
 
     useEffect(() => {
         const fetchChatDetail = async () => {
@@ -51,7 +68,7 @@ const ChatDetail = () => {
     }, [id]);
 
     useEffect(() => {
-        if (messagesEndRef.current) {
+        if (messagesEndRef.current && messages) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [messages]);
@@ -107,14 +124,26 @@ const ChatDetail = () => {
 
                     // Thêm tin nhắn mới vào danh sách và sắp xếp lại
                     setMessages((prevMessages) => {
-                        const updatedMessages = [...prevMessages, newMessage];
-                        return updatedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                        const messageExists = prevMessages.some((msg) => msg.id === newMessage.id);
+                        if (!messageExists) {
+                            const updatedMessages = [...prevMessages, newMessage];
+                            return updatedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                        }
+                        return prevMessages;
                     });
 
                     setChat('');
                     setImages([]);
                     setPreviewImages([]);
                     fileInputRef.current.value = null;
+
+                    // Kiểm tra xem socket đã kết nối thành công trước khi gửi tin nhắn
+                    if (socket) {
+                        console.log('Socket is connected chat thành công');
+                        socket.emit('sendMessage', { receiverId: id, content: chat, imageUrl: images.length > 0 ? URL.createObjectURL(images[0]) : '' });
+                    } else {
+                        console.error('Socket is not connected');
+                    }
                 }
             } catch (error) {
                 console.error('Error sending message:', error);
@@ -153,6 +182,7 @@ const ChatDetail = () => {
                     <div key={message.id} className={`message ${message.sender === 'me' ? 'right' : 'left'}`}>
                         <p>{message.content}</p>
                         {message.imageUrl && <img src={message.imageUrl} alt="Ảnh đính kèm" />}
+                        {/* <span className="timestamp">{new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span> */}
                     </div>
                 ))}
                 <div ref={messagesEndRef} /> {/* Đánh dấu vị trí cuối cùng */}
@@ -209,3 +239,4 @@ const ChatDetail = () => {
 };
 
 export default ChatDetail;
+

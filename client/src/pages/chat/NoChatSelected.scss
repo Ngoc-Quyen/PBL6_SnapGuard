@@ -1,0 +1,74 @@
+@use '../../style' as *;
+
+.no-chat-container {
+    @include themify($themes) {
+        background-color: #F6F3F3;
+        color: themed('textColor');
+
+        @include mobile {
+            display: none;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+
+        .no-chat-content {
+            max-width: 32rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+
+            .icon-wrapper {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 1rem;
+
+                .icon-bounce {
+                    width: 4rem;
+                    height: 4rem;
+                    border-radius: 1rem;
+                    background-color: #FFFFFF;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    animation: bounce 1.5s infinite;
+
+                    .icon {
+                        width: 2rem;
+                        height: 2rem;
+                        color: var(--primary);
+                    }
+                }
+            }
+
+            .welcome-title {
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+
+            .welcome-text {
+                color: rgba(var(--base-content), 0.6);
+            }
+        }
+
+        /* Animation */
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    }
+}

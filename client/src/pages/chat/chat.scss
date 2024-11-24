@@ -2,7 +2,7 @@
 
 .chat {
     @include themify($themes) {
-        background-color: themed('bgPrimary');
+        background-color: #F6F3F3;
         color: themed('textColor');
 
         @include mobile {
@@ -13,18 +13,16 @@
             display: none;
         }
 
-        // border-radius: 10px;
-        // padding: 10px 20px;
         height: 90vh;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        // margin-top: 10px;
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: #ffffff;
             padding: 10px 20px;
             border-bottom: 2px solid #ddd;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -44,7 +42,7 @@
                     padding: 5px 10px;
 
                     &:hover {
-                        background-color: themed('bgPrimarySoft');
+                        background-color: #F6F3F3;
                         border-radius: 10px;
                         cursor: pointer;
                     }
@@ -83,7 +81,7 @@
 
                 &:hover {
                     cursor: pointer;
-                    background-color: themed('bgPrimarySoft');
+                    background-color: #ebe4e4;
                     border-radius: 50%;
                 }
             }
@@ -105,7 +103,7 @@
 
                 &.left {
                     align-self: flex-start;
-                    background-color: #f6f3f3;
+                    background-color: #e8c0c0;
                     color: #000;
                 }
 
@@ -134,7 +132,7 @@
                 display: flex;
                 align-items: center;
                 gap: 15px;
-                max-width: 1124px; // Đảm bảo khung không vượt quá component cha
+                max-width: 100%; // Đảm bảo khung không vượt quá component cha
                 overflow-x: auto; // Kích hoạt cuộn ngang khi cần
                 white-space: nowrap; // Đảm bảo tất cả ảnh nằm trên một dòng
                 padding: 5px;
@@ -188,7 +186,7 @@
                 justify-content: space-between;
                 align-items: center;
                 padding: 10px;
-                background-color: themed('bgPrimary');
+                background-color: #ffffff;
                 border-radius: 5px;
                 gap: 10px;
 
@@ -207,8 +205,8 @@
                         height: 40px;
                         border-radius: 50%;
                         background-color: #ffffff;
-                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
                         cursor: pointer;
+                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 
                         i {
                             font-size: 20px;
@@ -216,7 +214,7 @@
                         }
 
                         &:hover {
-                            background-color: #f1f3f5;
+                            background-color: #F6F3F3;
 
                             i {
                                 color: #495057;
@@ -255,6 +253,196 @@
 
                         &::-webkit-scrollbar-thumb:hover {
                             background-color: #495057;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Media queries for responsive design
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px;
+
+                .info-user {
+                    .name {
+                        font-size: 16px;
+                    }
+                }
+
+                .info-detail {
+                    width: 30px;
+                    height: 30px;
+
+                    i {
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            .container {
+                padding: 10px;
+
+                .message {
+                    max-width: 80%;
+                    font-size: 14px;
+                }
+            }
+
+            .footer {
+                .image-preview-container {
+                    gap: 10px;
+
+                    .image-preview {
+                        width: 80px;
+                        max-height: 80px;
+                    }
+                }
+
+                .input-send {
+                    padding: 10px;
+
+                    .input {
+
+                        .btn-img,
+                        .send {
+                            width: 30px;
+                            height: 30px;
+
+                            i {
+                                font-size: 16px;
+                            }
+                        }
+
+                        .input-textarea {
+                            font-size: 14px;
+                            padding: 8px 12px;
+                        }
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 5px;
+
+                .info-user {
+                    .name {
+                        font-size: 14px;
+                    }
+                }
+
+                .info-detail {
+                    width: 25px;
+                    height: 25px;
+
+                    i {
+                        font-size: 14px;
+                    }
+                }
+            }
+
+            .container {
+                padding: 5px;
+
+                .message {
+                    max-width: 90%;
+                    font-size: 12px;
+                }
+            }
+
+            .footer {
+                .image-preview-container {
+                    gap: 5px;
+
+                    .image-preview {
+                        width: 60px;
+                        max-height: 60px;
+                    }
+                }
+
+                .input-send {
+                    padding: 5px;
+
+                    .input {
+
+                        .btn-img,
+                        .send {
+                            width: 25px;
+                            height: 25px;
+
+                            i {
+                                font-size: 14px;
+                            }
+                        }
+
+                        .input-textarea {
+                            font-size: 12px;
+                            padding: 6px 10px;
+                        }
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 360px) {
+            .header {
+                padding: 5px;
+
+                .info-user {
+                    .name {
+                        font-size: 12px;
+                    }
+                }
+
+                .info-detail {
+                    width: 20px;
+                    height: 20px;
+
+                    i {
+                        font-size: 12px;
+                    }
+                }
+            }
+
+            .container {
+                padding: 5px;
+
+                .message {
+                    max-width: 95%;
+                    font-size: 10px;
+                }
+            }
+
+            .footer {
+                .image-preview-container {
+                    gap: 5px;
+
+                    .image-preview {
+                        width: 50px;
+                        max-height: 50px;
+                    }
+                }
+
+                .input-send {
+                    padding: 5px;
+
+                    .input {
+
+                        .btn-img,
+                        .send {
+                            width: 20px;
+                            height: 20px;
+
+                            i {
+                                font-size: 12px;
+                            }
+                        }
+
+                        .input-textarea {
+                            font-size: 10px;
+                            padding: 4px 8px;
                         }
                     }
                 }

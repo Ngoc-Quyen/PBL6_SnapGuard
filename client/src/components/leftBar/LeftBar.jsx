@@ -31,9 +31,9 @@ const LeftBar = () => {
                     </Link>
                     <Link
                         className="item"
-                        // onClick={() => {
-                        //     logout();
-                        // }}
+                        onClick={() => {
+                            logout();
+                        }}
                         to={'/login'}
                     >
                         <i class="fas fa-sign-out-alt"></i>

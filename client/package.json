@@ -26,6 +26,7 @@
         "formik": "^2.4.6",
         "global": "^4.4.0",
         "lodash": "^4.17.21",
+        "lucide-react": "^0.460.0",
         "postcss": "^8.4.47",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
