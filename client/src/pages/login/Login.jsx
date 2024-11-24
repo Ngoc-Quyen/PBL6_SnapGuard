@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './login.scss';
 import welcome from '../../assets/images/welcome.png';
@@ -8,6 +8,13 @@ import { useAuth } from '../../hooks/useAuth';
 
 const Login = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        let token = localStorage.getItem("token");
+        if (token) {
+            navigate('/')
+        }
+    }, []);
 
     const { login } = useAuth();
     const users = [
