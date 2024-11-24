@@ -9,7 +9,6 @@
             .images {
                 width: 100%;
                 height: 300px;
-                // position: relative;
 
                 .cover {
                     width: 100%;
@@ -343,7 +342,6 @@
                         background-color: themed('bg');
                         color: themed('textColor');
                         padding: 10px 15px;
-
                         .title {
                             display: flex;
                             align-items: center;
@@ -371,7 +369,139 @@
 
                         .friends {
                             display: flex;
-                            flex-wrap: wrap;
+                            flex-wrap: wrap; /* Cho phép xuống dòng khi số lượng phần tử vượt quá chiều rộng container */
+                            gap: 10px; /* Khoảng cách giữa các friend */
+                            justify-content: space-between; /* Dàn đều các phần tử trong hàng */
+                            padding: 0;
+                            background-color: transparent;
+                            margin-top: 10px;
+
+                            .friend {
+                                flex: 1 1 calc(33.33% - 10px); /* Mỗi phần tử chiếm 1/3 chiều rộng container trừ khoảng cách */
+                                max-width: calc(33.33% - 10px); /* Đảm bảo tối đa là 1/3 chiều rộng */
+                                box-sizing: border-box; /* Bao gồm padding và border trong kích thước phần tử */
+                                position: relative; /* Tạo ngữ cảnh định vị cho modal */
+
+                                &:hover {
+                                    cursor: pointer;
+                                }
+
+                                .friend-avata {
+                                    aspect-ratio: 1 / 1;
+                                    img {
+                                        width: 100%;
+                                        height: 100%;
+                                        object-fit: cover;
+                                        border-radius: 10px;
+                                    }
+                                    &:hover {
+                                        opacity: 0.85;
+                                    }
+                                }
+                                .friend-name {
+                                    font-size: 13px;
+                                    font-weight: 500;
+                                    line-height: 1.5em; /* Đặt chiều cao dòng */
+                                    height: calc(1.5em * 2); /* Chiều cao cho 2 hàng */
+                                    overflow: hidden; /* Ẩn nội dung thừa */
+                                    text-overflow: ellipsis; /* Hiển thị dấu "..." nếu nội dung quá dài */
+                                    display: -webkit-box; /* Đảm bảo hỗ trợ trên Webkit */
+                                    -webkit-line-clamp: 2; /* Giới hạn ở 2 hàng */
+                                    -webkit-box-orient: vertical; /* Hiển thị dạng cột dọc */
+                                }
+
+                                .modal {
+                                    display: none; /* Mặc định ẩn modal */
+                                    position: absolute; /* Định vị modal so với `.friend` */
+                                    top: 70%; /* Hiển thị modal ngay dưới `.friend` */
+                                    left: 0;
+                                    right: 0;
+                                    background-color: themed('bg'); /* Nền trắng */
+                                    border: 1px solid themed('bgSoft'); /* Viền modal */
+                                    border-radius: 8px; /* Bo góc */
+                                    padding: 10px; /* Khoảng cách bên trong modal */
+                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+                                    z-index: 100; /* Đảm bảo modal hiển thị trên các phần tử khác */
+                                    width: 250px; /* Chiều rộng cố định */
+                                    .modal-info {
+                                        display: flex;
+                                        gap: 10px; /* Khoảng cách giữa các phần trong modal */
+                                        .info-left img {
+                                            width: 50px; /* Kích thước ảnh trong modal */
+                                            height: 50px;
+                                            border-radius: 50%; /* Bo tròn ảnh */
+                                            object-fit: cover;
+                                        }
+
+                                        .info-right {
+                                            display: flex;
+                                            flex-direction: column;
+                                            gap: 5px; /* Khoảng cách giữa các dòng thông tin */
+                                            .info-name {
+                                                font-size: 18px;
+                                                font-weight: bold;
+                                            }
+
+                                            .info-friend,
+                                            .info-address {
+                                                font-size: 14px;
+                                                display: flex;
+                                                align-items: center;
+                                                gap: 10px; /* Khoảng cách giữa icon và text */
+                                            }
+                                        }
+                                    }
+
+                                    .modal-btn {
+                                        display: flex;
+                                        justify-content: space-between;
+                                        margin-top: 10px;
+
+                                        .btn-friend,
+                                        .btn-chat,
+                                        .btn-menu {
+                                            display: flex;
+                                            gap: 5px;
+                                            align-items: center;
+                                            justify-content: center;
+                                            border-radius: 5px;
+                                            font-size: 15px;
+                                            color: white;
+                                            padding: 7px 15px;
+
+                                            &:hover {
+                                                opacity: 0.85;
+                                            }
+                                        }
+                                        .btn-chat {
+                                            background-color: #5271ff;
+                                            text-decoration: none;
+                                        }
+                                        .btn-menu,
+                                        .btn-friend {
+                                            background-color: gray;
+                                        }
+                                        .btn-menu {
+                                            padding: 7px 10px;
+                                        }
+                                    }
+                                }
+                                &:hover .modal {
+                                    display: block; /* Hiển thị modal khi hover vào `.friend` */
+                                }
+                                &:nth-child(3n + 2) .modal {
+                                    left: -85%; /* Hủy left mặc định */
+                                    transform: translateX(0); /* Loại bỏ dịch chuyển */
+                                }
+                                &:nth-child(3n) .modal {
+                                    left: auto; /* Hủy left mặc định */
+                                    transform: translateX(0); /* Loại bỏ dịch chuyển */
+                                }
+                                &:nth-child(n + 7) .modal {
+                                    top: -100%;
+                                    transform: translateX(0); /* Loại bỏ dịch chuyển */
+                                }
+                            }
                         }
                     }
                 }

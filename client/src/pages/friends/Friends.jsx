@@ -11,8 +11,8 @@ const Friends = () => {
     return (
         <div>
             {/* <ListFriends /> */}
-            <ListFriendsRequest />
-            <ListFriendsRequestOut />
+            <ListFriendsRequest linkAPI={'friend/requests/incoming'} />
+            <ListFriendsRequestOut linkAPI={'friend/requests/outgoing'} />
             <ListFriendsSuggestion />
         </div>
     );

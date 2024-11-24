@@ -237,3 +237,86 @@ export const listNotification = [
         type: 'previous', // Thông báo trước đó
     },
 ];
+
+export const listTest = [
+    {
+        friendId: 1,
+        friendName: 'Tiến Dương',
+        friendAvatar: 'https://i.pinimg.com/736x/48/ed/e5/48ede5dc2ff9c3b8922ee452161ee7c5.jpg',
+    },
+    {
+        friendId: 2,
+        friendName: 'Nguyen Hien',
+        friendAvatar: 'https://i.pinimg.com/736x/0b/95/be/0b95bec75103b364ce9220c0b157d274.jpg',
+    },
+    {
+        friendId: 3,
+        friendName: 'Huỳnh Ngân',
+        friendAvatar: 'https://i.pinimg.com/736x/a3/2a/7b/a32a7b9b3a049f5f5ce1542325840ff0.jpg',
+    },
+    {
+        friendId: 4,
+        friendName: 'Ngọc Huyền',
+        friendAvatar: 'https://i.pinimg.com/736x/8b/b3/93/8bb393847727402a499c9f0eb5003791.jpg',
+    },
+    {
+        friendId: 5,
+        friendName: 'Lê Thị Thanh Thái',
+        friendAvatar: 'https://i.pinimg.com/736x/cd/21/9a/cd219a4af7c76948344de9a7db6597a9.jpg',
+    },
+    {
+        friendId: 6,
+        friendName: 'Hạnh Nguyên',
+        friendAvatar: 'https://i.pinimg.com/736x/1b/a0/02/1ba0022aede700acb726c8d63eddf628.jpg',
+    },
+    {
+        friendId: 7,
+        friendName: 'Bạch Huỳnh Thanh Phương',
+        friendAvatar: 'https://i.pinimg.com/564x/0b/1a/a2/0b1aa28a862d8aa7de82dfa332990078.jpg',
+    },
+    {
+        friendId: 8,
+        friendName: 'Phước Nguyên',
+        friendAvatar: 'https://i.pinimg.com/564x/52/db/7a/52db7a0e9762d429e183eefd490578c9.jpg',
+    },
+    {
+        friendId: 9,
+        friendName: 'Chí Bảo',
+        friendAvatar: 'https://i.pinimg.com/736x/73/7d/74/737d74b5b3c7b2e1b26fe1a4a133394d.jpg',
+    },
+    {
+        friendId: 10,
+        friendName: 'Như Ngọc',
+        friendAvatar: 'https://i.pinimg.com/736x/d5/38/54/d538549296487b6db45842902d300d8f.jpg',
+    },
+    {
+        friendId: 11,
+        friendName: 'Tiến Dương',
+        friendAvatar: 'https://i.pinimg.com/736x/e8/f4/b6/e8f4b6db79d79e1126c2ac126cdb226d.jpg',
+    },
+    {
+        friendId: 12,
+        friendName: 'Nguyen Hien',
+        friendAvatar: 'https://i.pinimg.com/736x/56/4a/32/564a3248f09ad4f701ad97618457f056.jpg',
+    },
+    {
+        friendId: 13,
+        friendName: 'Huỳnh Ngân',
+        friendAvatar: 'https://i.pinimg.com/736x/2f/ab/97/2fab9766d4cee1258975e06735c1d78b.jpg',
+    },
+    {
+        friendId: 14,
+        friendName: 'Ngọc Huyền',
+        friendAvatar: 'https://i.pinimg.com/736x/0d/e1/bf/0de1bfb20f5841e3d6ae7fea55b73c38.jpg',
+    },
+    {
+        friendId: 15,
+        friendName: 'Lê Thị Thanh Thái',
+        friendAvatar: 'https://i.pinimg.com/736x/61/56/a6/6156a67491a065ce96432b7cdc97e0f5.jpg',
+    },
+    {
+        friendId: 16,
+        friendName: 'Hạnh Nguyên',
+        friendAvatar: 'https://i.pinimg.com/564x/fb/55/3a/fb553afadf5f064e4fd6be4fb5c6409b.jpg',
+    },
+];

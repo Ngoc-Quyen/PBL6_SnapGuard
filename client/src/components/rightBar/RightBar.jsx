@@ -1,7 +1,30 @@
 import { Link } from 'react-router-dom';
 import './rightBar.scss';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const RightBar = () => {
+const RightBar = ({ linkAPI }) => {
+    const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+    const storedToken = localStorage.getItem('token');
+
+    const [listFriends, setListFriends] = useState([]);
+    const fetchPosts = async () => {
+        try {
+            const response = await axios.get(`${API_ENDPOINT}/${linkAPI}`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                },
+            });
+            setListFriends(response.data); // Assume response.data contains the posts array
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    };
+
+    //TEMPORARY
+    useEffect(() => {
+        fetchPosts();
+    }, [linkAPI]);
     return (
         <div className="rightBar">
             <div className="container">
@@ -10,26 +33,22 @@ const RightBar = () => {
                         <span>Lời mời kết bạn</span>
                         <Link to={'/friends'}>Xem tất cả</Link>
                     </div>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img src="https://i.pinimg.com/736x/89/89/aa/8989aa841c705cd504ac64f448a1c6d5.jpg" alt="" />
-                            <span>Hiếu Hiếu</span>
-                        </div>
-                        <div className="buttons">
-                            <button>Đồng ý</button>
-                            <button>Xóa</button>
-                        </div>
-                    </div>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img src="https://i.pinimg.com/564x/5a/4d/7c/5a4d7cc2df67478a2e847b1f206f6db0.jpg" alt="" />
-                            <span>Phương Phương</span>
-                        </div>
-                        <div className="buttons">
-                            <button>Đồng ý</button>
-                            <button>Xóa</button>
-                        </div>
-                    </div>
+                    {listFriends.length === 0 ? (
+                        <div>Chưa có lời mời kết bạn nào.</div>
+                    ) : (
+                        listFriends.map((friend) => (
+                            <div className="user">
+                                <div className="userInfo">
+                                    <img src={friend.recipientAvatar} alt="" />
+                                    <span>{friend.recipientName}</span>
+                                </div>
+                                <div className="buttons">
+                                    <button>Đồng ý</button>
+                                    <button>Xóa</button>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
         </div>

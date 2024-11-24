@@ -1,12 +1,15 @@
 import React from 'react';
 
 const FriendRequestOut = ({ friend }) => {
+    const showProfile = () => {
+        console.log('Chưa có API gọi userById');
+    };
     return (
         <div className="friend">
-            <div className="img-avt">
+            <div className="img-avt" onClick={showProfile}>
                 <img src={friend.recipientAvatar} alt="" />
             </div>
-            <div className="lable">
+            <div className="lable" onClick={showProfile}>
                 <p className="nameUser">{friend.recipientName}</p>
             </div>
             <div className="btn">
