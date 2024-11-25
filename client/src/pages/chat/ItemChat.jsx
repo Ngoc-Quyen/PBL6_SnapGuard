@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import axios from 'axios';
 import { vi } from 'date-fns/locale';
@@ -9,6 +9,7 @@ const ItemChat = (props) => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
     const parsedTime = parseISO(props.user.time);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -29,13 +30,14 @@ const ItemChat = (props) => {
             const storedToken = localStorage.getItem('token');
             const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT || 'https://pbl6-snapguard.onrender.com';
 
-            await axios.delete(`${API_ENDPOINT}/chat/${props.user.id}`, {
+            await axios.delete(`${API_ENDPOINT}/chat/messages/${props.user.id}`, {
                 headers: {
                     Authorization: `Bearer ${storedToken}`,
                 },
             });
 
-            onDelete(props.user.id); // Gọi callback để cập nhật danh sách bạn chat
+            props.onDelete(props.user.id); // Gọi callback để cập nhật danh sách bạn chat
+            navigate('/chat')
         } catch (error) {
             console.error('Error deleting chat:', error);
             alert('Xóa đoạn chat thất bại. Vui lòng thử lại!');
