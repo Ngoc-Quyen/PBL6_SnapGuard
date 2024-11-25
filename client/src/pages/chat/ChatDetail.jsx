@@ -12,6 +12,8 @@ const ChatDetail = () => {
     const [images, setImages] = useState([]); // Lưu nhiều ảnh
     const [previewImages, setPreviewImages] = useState([]); // Lưu URL xem trước cho nhiều ảnh
     const messagesEndRef = useRef(null); // Tham chiếu đến cuối danh sách tin nhắn
+    const [imageL, setImageL] = useState('');
+    const [imageR, setImageR] = useState('');
 
     const storedToken = localStorage.getItem('token');
     const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT || 'https://pbl6-snapguard.onrender.com';
@@ -52,6 +54,8 @@ const ChatDetail = () => {
                     full_name: data.left.name,
                 });
 
+                setImageL(data.left.avatar)
+                setImageR(data.right.avatar)
                 // Sắp xếp tin nhắn theo thời gian
                 const sortedMessages = [
                     ...data.right.messages.map((msg) => ({ ...msg, sender: 'me' })),
@@ -177,15 +181,44 @@ const ChatDetail = () => {
                     <i className="fas fa-info-circle"></i>
                 </div>
             </div>
+
             <div className="container">
                 {messages.map((message) => (
-                    <div key={message.id} className={`message ${message.sender === 'me' ? 'right' : 'left'}`}>
-                        <p>{message.content}</p>
-                        {message.imageUrl && <img src={message.imageUrl} alt="Ảnh đính kèm" />}
-                        {/* <span className="timestamp">{new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span> */}
+                    <div
+                        key={message.id}
+                        className={`message ${message.sender === "me" ? "chatRight" : "chatLeft"}`}
+                        ref={messagesEndRef}
+                    >
+
+                        {message.sender !== "me" && (
+                            <div className="avatar">
+                                <img src={imageL} alt="Avatar" />
+                            </div>
+                        )}
+
+                        <div className="message-content">
+                            <div className="message-body">
+                                {message.imageUrl && <img src={message.imageUrl} alt="Attachment" />}
+                                <p>{message.content}</p>
+                            </div>
+
+
+                            {/* <span className="timestamp">
+                                {new Date(message.timestamp).toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                })}
+                            </span> */}
+                        </div>
+
+
+                        {message.sender === "me" && (
+                            <div className="avatar">
+                                <img src={imageR} alt="Avatar" />
+                            </div>
+                        )}
                     </div>
                 ))}
-                <div ref={messagesEndRef} /> {/* Đánh dấu vị trí cuối cùng */}
             </div>
             <div className="footer">
                 {previewImages.length > 0 && (
