@@ -10,6 +10,7 @@ const ModalEdit = ({ onClose, post, user, onDeleteSuccess }) => {
 
     const [values, setValues] = useState(post.content);
     const [imagePreviews, setImagePreviews] = useState([]);
+    const [isSensitiveImage, setIsSensitiveImage] = useState(false);
     const [previewImage, setPreviewImage] = useState(post.image_url);
     const textareaRef = useRef(null);
     const [image, setImage] = useState(null);
@@ -26,13 +27,13 @@ const ModalEdit = ({ onClose, post, user, onDeleteSuccess }) => {
             textarea.style.height = `${Math.min(textarea.scrollHeight, 300)}px`; // Cập nhật chiều cao tối đa là 300px
         }
     };
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setImage(file); // Lưu ảnh vào state
-            setPreviewImage(URL.createObjectURL(file)); // Tạo URL tạm thời để xem trước ảnh
-        }
-    };
+    // const handleFileChange = (event) => {
+    //     const file = event.target.files[0];
+    //     if (file) {
+    //         setImage(file); // Lưu ảnh vào state
+    //         setPreviewImage(URL.createObjectURL(file)); // Tạo URL tạm thời để xem trước ảnh
+    //     }
+    // };
     const setCursorToEnd = () => {
         const el = editableDivRef.current; // Tham chiếu đến div
         if (!el) return;
@@ -56,20 +57,63 @@ const ModalEdit = ({ onClose, post, user, onDeleteSuccess }) => {
     //         setPreviewImage(post.image_url);
     //     }
     // }, [post]);
-    const handleImageUpload = (e) => {
-        const files = Array.from(e.target.files); // Lấy danh sách các tệp
-        const newImagePreviews = [];
 
-        files.forEach((file) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                newImagePreviews.push(reader.result); // Thêm URL ảnh vào mảng
-                if (newImagePreviews.length === files.length) {
-                    setImagePreviews((prev) => [...prev, ...newImagePreviews]); // Cập nhật state khi tất cả ảnh được load
-                }
-            };
-            reader.readAsDataURL(file); // Đọc tệp dưới dạng URL
-        });
+
+    // const handleImageUpload = (e) => {
+    //     const files = Array.from(e.target.files); // Lấy danh sách các tệp
+    //     const newImagePreviews = [];
+
+    //     files.forEach((file) => {
+    //         const reader = new FileReader();
+    //         reader.onload = () => {
+    //             newImagePreviews.push(reader.result); // Thêm URL ảnh vào mảng
+    //             if (newImagePreviews.length === files.length) {
+    //                 setImagePreviews((prev) => [...prev, ...newImagePreviews]); // Cập nhật state khi tất cả ảnh được load
+    //             }
+    //         };
+    //         reader.readAsDataURL(file); // Đọc tệp dưới dạng URL
+    //     });
+    // };
+
+
+    const checkSensitiveImage = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await axios.post('http://localhost:8000/api/v1/image/predict', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            const result = response.data?.DT?.predicted_label || 'safe';
+            if (result === 'unsafe') {
+                setIsSensitiveImage(true);
+                alert('Ảnh không an toàn, vui lòng chọn ảnh khác!');
+                return false;
+            }
+            setIsSensitiveImage(false);
+            return true;
+        } catch (error) {
+            console.error('Lỗi khi nhận diện ảnh:', error);
+            alert('Không thể xử lý ảnh, vui lòng thử lại.');
+            return false;
+        }
+    };
+
+    const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const isSafe = await checkSensitiveImage(file);
+            if (isSafe) {
+                setImage(file);
+                setPreviewImage(URL.createObjectURL(file));
+            } else {
+                setPreviewImage(null);
+                setImage(null);
+            }
+        }
     };
 
     const handleUpdatePost = async () => {
@@ -186,7 +230,7 @@ const ModalEdit = ({ onClose, post, user, onDeleteSuccess }) => {
                                             accept="image/png, image/jpeg, image/gif"
                                             ref={fileInputRef} // Gán tham chiếu
                                             onChange={handleFileChange}
-                                            // multiple
+                                        // multiple
                                         />
                                         <i class="fa-regular fa-image" title="Ảnh/Video" onClick={handleIconClick}></i>
                                     </div>
