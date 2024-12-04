@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import './share.scss';
 import Select from 'react-select';
 import { statusPost } from '../../utils/status';
+import defaultImage from '../../assets/images/anhNhayCam.png'
 import axios from 'axios';
 
 const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
@@ -16,21 +17,50 @@ const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
         onClose();
     };
 
-    const handleImageUpload = (e) => {
-        const files = Array.from(e.target.files); // Lấy danh sách các tệp
-        const newImagePreviews = [];
 
-        files.forEach((file) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                newImagePreviews.push(reader.result); // Thêm URL ảnh vào mảng
-                if (newImagePreviews.length === files.length) {
-                    setImagePreviews((prev) => [...prev, ...newImagePreviews]); // Cập nhật state khi tất cả ảnh được load
+    const handleImageUpload = async (e) => {
+        const files = Array.from(e.target.files); // Lấy danh sách các tệp
+        const validFiles = []; // Lưu trữ các file hợp lệ
+
+        for (const file of files) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                // Gọi API nhận diện hình ảnh
+                const response = await axios.post('http://localhost:8000/api/v1/image/predict', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                // Xử lý kết quả từ API
+                const aiResult = response.data?.DT?.predicted_label || {};
+                if (aiResult === 'unsafe') {
+                    // Thêm ảnh mặc định nếu ảnh không an toàn
+                    setImagePreviews((prev) => [...prev, defaultImage]);
+                } else {
+                    // Tạo URL ảnh nếu ảnh an toàn
+                    validFiles.push(file); // Thêm file hợp lệ vào danh sách
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        setImagePreviews((prev) => [...prev, reader.result]);
+                    };
+                    reader.readAsDataURL(file);
                 }
-            };
-            reader.readAsDataURL(file); // Đọc tệp dưới dạng URL
-        });
+            } catch (error) {
+                console.error('Lỗi khi gọi API nhận diện hình ảnh:', error);
+                alert('Không thể xử lý ảnh. Vui lòng thử lại.');
+            }
+        }
+
+
+        const dataTransfer = new DataTransfer();
+        validFiles.forEach((file) => dataTransfer.items.add(file));
+        fileInputRef.current.files = dataTransfer.files;
     };
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Ngăn reload trang
@@ -43,6 +73,7 @@ const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
             if (fileInputRef.current.files[0]) {
                 formData.append('image', fileInputRef.current.files[0]); // Thêm file ảnh vào FormData
             }
+
 
             // Gọi API
             const response = await axios.post(`${API_ENDPOINT}/posts`, formData, {
@@ -61,7 +92,8 @@ const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
         } catch (error) {
             // Xử lý lỗi
             console.error('Error:', error.response?.data || error.message);
-            alert('Có lỗi xảy ra khi đăng bài. Vui lòng thử lại.');
+            closeModal();
+            // alert('Có lỗi xảy ra khi đăng bài. Vui lòng thử lại.');
         }
     };
 
@@ -124,6 +156,8 @@ const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
     const handleRemoveImage = (index) => {
         setImagePreviews((imagePreviews) => imagePreviews.filter((_, i) => i !== index));
     };
+
+
     return (
         <div>
             <div className="modal-overlay">
