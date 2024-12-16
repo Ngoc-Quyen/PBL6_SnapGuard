@@ -62,20 +62,23 @@ const Post = ({ post, onDeleteSuccess }) => {
                     <div className="userInfo">
                         <img src={post.user.avatar_url} alt="" />
                         <div className="details">
-                            <Link to={`/profile/${post.user.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            <Link to={`/${post.user.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <span className="name">{post.user.full_name}</span>
                             </Link>
                             <span className="date">{timeDifference}</span>
                         </div>
                     </div>
-                    <div
-                        className="btn-menu"
-                        onClick={() => {
-                            setOpenModal(!openModal);
-                        }}
-                    >
-                        <i className="fas fa-ellipsis-h font-size-18"></i>
-                    </div>
+                    {post.user.id === currentUser.id && (
+                        <div
+                            className="btn-menu"
+                            onClick={() => {
+                                setOpenModal(!openModal);
+                            }}
+                        >
+                            <i className="fas fa-ellipsis-h font-size-18"></i>
+                        </div>
+                    )}
+
                     {openModal && <ModalPost post={post} onClose={closeModalPost} onDeleteSuccess={onDeleteSuccess} />}
                 </div>
                 <div className="content">

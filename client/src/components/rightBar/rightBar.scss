@@ -63,7 +63,14 @@
                             border-radius: 50%;
                             object-fit: cover;
                         }
-
+                        .userInfo-name {
+                            text-decoration: none;
+                            font-weight: 500;
+                            color: themed('textColor');
+                            white-space: nowrap; /* Không cho xuống dòng */
+                            overflow: hidden; /* Ẩn phần nội dung vượt quá */
+                            text-overflow: ellipsis;
+                        }
                         .online {
                             width: 12px;
                             height: 12px;

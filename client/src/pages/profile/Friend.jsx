@@ -6,16 +6,16 @@ const Friend = ({ friend }) => {
     return (
         <div className="friend">
             <div className="friend-avata">
-                <img src={friend.friendAvatar} alt="" />
+                <img src={friend.avatar_url} alt="" />
             </div>
-            <div className="friend-name">{friend.friendName}</div>
+            <div className="friend-name">{friend.full_name}</div>
             <div className="modal">
                 <div className="modal-info">
                     <div className="info-left">
-                        <img src={friend.friendAvatar} alt="" />
+                        <img src={friend.avatar_url} alt="" />
                     </div>
                     <div className="info-right">
-                        <div className="info-name">{friend.friendName}</div>
+                        <div className="info-name">{friend.full_name}</div>
                         <div className="info-friend">
                             <i class="fas fa-user-friends"></i>
                             <span>6 bạn chung</span>

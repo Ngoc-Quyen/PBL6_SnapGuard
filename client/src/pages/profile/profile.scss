@@ -233,6 +233,10 @@
                         }
                         .btn-chat {
                             background-color: #5271ff;
+                            text-decoration: none;
+                            span {
+                                margin-bottom: 2px;
+                            }
                         }
                         .btn-chat:hover {
                             background-color: #6a84fa;

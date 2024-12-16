@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import { listFriendChat, listInvitation, listNotification } from '../../utils/dataTest';
-import ItemChat from '../../pages/chat/ItemChat';
 import './notification.scss';
-import { Link } from 'react-router-dom';
-import ItemNotification from './ItemNotification';
-import NotificationNew from './NotificationNew';
 import NotifiAll from './NotifiAll';
 import NotifiNonRead from './NotifiNonRead';
 const Notification = () => {
@@ -32,7 +27,7 @@ const Notification = () => {
                 </div>
             </div>
             {/* Hiển thị thông báo dựa trên giá trị của nonRead */}
-            {nonRead ? <NotifiNonRead /> : <NotifiAll />}
+            {nonRead ? <NotifiNonRead linkAPI={'read-all'} /> : <NotifiAll />}
         </div>
     );
 };
