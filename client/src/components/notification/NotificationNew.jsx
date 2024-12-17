@@ -1,14 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './notification.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { calculateTimeDifference } from '../../utils/calculateTimeDifference ';
+import axios from 'axios';
+import Post from '../post/Post';
+import { typeNotifine } from '../../utils/typeNotifine';
 
-const NotificationNew = ({ notifi }) => {
+const NotificationNew = ({ notifi, handleListNotifine }) => {
+    const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+    const storedToken = localStorage.getItem('token');
+
+    const checkRead = async () => {
+        try {
+            const response = await axios.patch(`${API_ENDPOINT}/notification/${notifi.id}/read`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                },
+            });
+            return response.data.is_read;
+        } catch (error) {
+            console.log('🚀 ~ checkRead ~ error:', error);
+        }
+    };
     const [checkSeen, setCheckSeen] = useState(false);
     const [bell, setBell] = useState(false);
-
+    const handleCheckRead = async () => {
+        const result = await checkRead();
+        if (result) {
+            await handleListNotifine();
+            console.log('đã click');
+        }
+    };
+    const navigate = useNavigate();
+    const handleClickFriends = async () => {
+        if (notifi.type === typeNotifine.FRIEND_REQUEST) {
+            navigate(`/${notifi.sender.id}`);
+        } else {
+            navigate(`/post/${notifi.post_id}`);
+        }
+    };
     return (
-        <div className="item-chat">
+        <div
+            className="item-chat"
+            onClick={() => {
+                handleCheckRead();
+                handleClickFriends();
+            }}
+        >
             <div className="item-avata">
                 <img src={notifi.sender.avatar_url} alt="" />
             </div>

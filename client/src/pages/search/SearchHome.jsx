@@ -3,7 +3,6 @@ import axios from 'axios';
 import SearchItemHome from './SearchItemHome';
 import './searchHome.scss';
 
-
 const SearchHome = ({ query }) => {
     const [searchResults, setSearchResults] = useState([]);
     const storedToken = localStorage.getItem('token');
@@ -35,9 +34,7 @@ const SearchHome = ({ query }) => {
             {searchResults.length === 0 ? (
                 <div className="no-results">Không tìm thấy kết quả</div>
             ) : (
-                searchResults.map((user) => (
-                    <SearchItemHome key={user.id} user={user} />
-                ))
+                searchResults.map((user) => <SearchItemHome key={user.id} user={user} />)
             )}
         </div>
     );

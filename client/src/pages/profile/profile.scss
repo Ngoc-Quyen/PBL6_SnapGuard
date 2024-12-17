@@ -219,7 +219,9 @@
                         gap: 10px;
                         padding: 10px;
                         .btn-chat,
-                        .btn-friend {
+                        .btn-friend,
+                        .btn-addFriend,
+                        .btn-request {
                             font-size: 16px;
                             padding: 10px 12px;
                             display: flex;
@@ -231,7 +233,9 @@
                             cursor: pointer;
                             transition: background-color 0.3s;
                         }
-                        .btn-chat {
+                        .btn-chat,
+                        .btn-addFriend,
+                        .btn-request {
                             background-color: #5271ff;
                             text-decoration: none;
                             span {
@@ -239,13 +243,14 @@
                             }
                         }
                         .btn-chat:hover {
-                            background-color: #6a84fa;
+                            opacity: 0.8;
                         }
-                        .btn-friend {
+                        .btn-friend,
+                        .non-friend {
                             background-color: gray;
                         }
                         .btn-friend:hover {
-                            background-color: rgb(142, 139, 139);
+                            opacity: 0.8;
                         }
                     }
                 }
@@ -444,6 +449,8 @@
                                             .info-name {
                                                 font-size: 18px;
                                                 font-weight: bold;
+                                                text-decoration: none;
+                                                color: themed('textColor');
                                             }
 
                                             .info-friend,

@@ -147,7 +147,6 @@ const Comments = ({ comments, postId, setCommentCount }) => {
             ...prevState,
             [id]: !prevState[id],
         }));
-        console.log('🚀 ~ Comments ~ showModalEdit:', showModalEdit);
         setModalVisible((prevState) => ({
             ...prevState,
             [id]: false,
@@ -173,6 +172,16 @@ const Comments = ({ comments, postId, setCommentCount }) => {
 
         fetchComments();
     }, [postId]);
+
+    const [showReplies, setShowReplies] = useState({});
+
+    const toggleReplies = (id) => {
+        setShowReplies((prevState) => ({
+            ...prevState,
+            [id]: !prevState[id], // Đổi trạng thái hiển thị replies của commentId
+        }));
+        console.log('🚀 ~ toggleReplies ~ showReplies:', showReplies);
+    };
     return (
         <div className="comments">
             <div className="write">
@@ -231,7 +240,7 @@ const Comments = ({ comments, postId, setCommentCount }) => {
             </div>
             {Array.isArray(listComments) &&
                 listComments.map((comment) => (
-                    <div className="comment">
+                    <div className="comment" key={comment.comment_id}>
                         <div className="comment-content">
                             <img src={comment.user.avatar_url} alt="" />
                             <div className="info">
@@ -251,7 +260,7 @@ const Comments = ({ comments, postId, setCommentCount }) => {
                                             comment={comment}
                                             onClose={() => handleCloseModal(comment.comment_id)}
                                             getListComment={() => getListComment(postId)}
-                                            setListComments={setListComments} // Truyền hàm cập nhật state
+                                            setListComments={setListComments} // Update state
                                         />
                                     )}
 
@@ -262,9 +271,9 @@ const Comments = ({ comments, postId, setCommentCount }) => {
                                             display: showModalEdit[comment.comment_id] ? 'none' : 'flex',
                                         }}
                                     >
-                                        <i class="fas fa-ellipsis-h"></i>
+                                        <i className="fas fa-ellipsis-h"></i>
                                     </div>
-                                    {isModalVisible[comment.comment_id] && (
+                                    {isModalVisible[comment.comment_id] && comment.user.id === currentUser.id && (
                                         <div className="modal-menu">
                                             <div
                                                 className="btn btn-edit"
@@ -307,10 +316,37 @@ const Comments = ({ comments, postId, setCommentCount }) => {
                                     <i className="far fa-heart font-size-18"></i>
                                 )}
                             </div>
-                            <div className="btn-comment">
-                                <i class="fas fa-comment-dots"></i>
+                            <div
+                                className="btn-comment"
+                                onClick={() => {
+                                    toggleReplies();
+                                }}
+                            >
+                                <i className="fas fa-comment-dots"></i>
+                                {comment.replies.length > 0 && <span>{comment.replies.length}</span>}
                             </div>
                         </div>
+
+                        {showReplies[comment.comment_id] && comment.replies && (
+                            /* <div className="replies">
+                                {comment.replies.map((reply) => (
+                                    <div className="reply" key={reply.comment_id}>
+                                        <div className="reply-content">
+                                            <img src={reply.user.avatar_url} alt="" />
+                                            <div className="info">
+                                                <span>{reply.user.full_name}</span>
+                                                <p>{reply.content}</p>
+                                                {reply.image_url && <img src={reply.image_url} alt="Reply image" />}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div> */
+                            <div>
+                                <p>Ai biết</p>
+                                <p>không hản</p>
+                            </div>
+                        )}
                     </div>
                 ))}
         </div>

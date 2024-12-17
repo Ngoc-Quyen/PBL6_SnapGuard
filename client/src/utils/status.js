@@ -18,3 +18,11 @@ export const statusPost = [
         accessModifier: 'public',
     },
 ];
+
+export const statusRelationship = {
+    Self: 'self',
+    Accepted: 'accepted',
+    Pending_by_target: 'pending_by_target',
+    Stranger: 'stranger',
+    Pending: 'pending',
+};

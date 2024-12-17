@@ -132,7 +132,17 @@ const Register = () => {
                                 <Field type="text" placeholder="Name" name="full_name" />
                                 <ErrorMessage name="full_name" component="div" className="errorMessage" />
                             </div>
-                            <button type="submit">Đăng kí</button>
+                            <button type="submit" className="btnSubmit">
+                                Đăng kí
+                            </button>
+                            <div className="btn btnGG">
+                                <img
+                                    src="https://www.svgrepo.com/show/303108/google-icon-logo.svg"
+                                    alt=""
+                                    className="btnGG-img"
+                                />
+                                <span>Đăng kí bằng Google</span>
+                            </div>
                         </Form>
                     </Formik>
                 </div>

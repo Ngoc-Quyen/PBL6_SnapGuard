@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './notification.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { calculateTimeDifference } from '../../utils/calculateTimeDifference ';
 import { typeNotifine } from '../../utils/typeNotifine';
+import axios from 'axios';
 
 const ItemNotification = ({ notifi }) => {
     const [checkSeen, setCheckSeen] = useState(false);
@@ -11,6 +12,8 @@ const ItemNotification = ({ notifi }) => {
     const handleClickFriends = async () => {
         if (notifi.type === typeNotifine.FRIEND_REQUEST) {
             navigate(`/${notifi.sender.id}`);
+        } else {
+            navigate(`/post/${notifi.post_id}`);
         }
     };
     return (

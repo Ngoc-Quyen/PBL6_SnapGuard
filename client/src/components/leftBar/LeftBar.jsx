@@ -11,21 +11,25 @@ const LeftBar = () => {
         <div className="leftBar">
             <div className="">
                 <ul>
-                    <Link className="item" to={`/${currentUser.id}`}>
+                    <Link
+                        className={`item ${window.location.pathname === `/${currentUser.id}` ? 'active' : ''}`}
+                        to={`/${currentUser.id}`}
+                        onClick={() => window.location.reload()}
+                    >
                         <div className="user">
                             <img src={currentUser.avatar_url} alt="" />
                             <span>{currentUser.full_name}</span>
                         </div>
                     </Link>
-                    <Link className="item" to={'/'}>
+                    <Link className={`item ${window.location.pathname === '/' ? 'active' : ''}`} to={'/'}>
                         <i class="fas fa-home"></i>
                         <p className="item-title">Trang chủ</p>
                     </Link>
-                    <Link className="item" to={'/friends'}>
+                    <Link className={`item ${window.location.pathname === '/friends' ? 'active' : ''}`} to={'/friends'}>
                         <i class="fa-solid fa-user-group"></i>
                         <p className="item-title">Bạn bè</p>
                     </Link>
-                    <Link className="item" to={'/chat'}>
+                    <Link className={`item ${window.location.pathname === '/chat' ? 'active' : ''}`} to={'/chat'}>
                         <i class="fa-brands fa-discourse item-icon"></i>
                         <p className="item-title">Chat</p>
                     </Link>

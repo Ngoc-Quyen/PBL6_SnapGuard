@@ -6,6 +6,8 @@ import { calculateTimeDifference } from '../../utils/calculateTimeDifference ';
 import ModalPost from './ModalPost';
 import axios from 'axios';
 import { AuthContext } from '../../context/authContext';
+import PostDetail from './PostDetail';
+import { statusPost } from '../../utils/status';
 
 const Post = ({ post, onDeleteSuccess }) => {
     const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
@@ -16,9 +18,23 @@ const Post = ({ post, onDeleteSuccess }) => {
     const [comment_count, setCommentCount] = useState(post.comment_count);
     const [like_count, setLikeCount] = useState(post.like_count);
     const [liked, setLiked] = useState(false);
-
+    const [showPostDetail, setShowPostDetail] = useState(false);
     const closeModalPost = () => {
         setOpenModal(!openModal); // Đóng ModalPost khi cần
+    };
+    const ShowPostDetail = () => {
+        setShowPostDetail(true);
+    };
+    const CloseModalPostDetail = () => {
+        setShowPostDetail(false);
+    };
+    const ShowComment = () => {
+        setCommentOpen(true);
+        setShowPostDetail(true);
+    };
+    const CloseComment = () => {
+        setCommentOpen(false);
+        setShowPostDetail(false);
     };
 
     const onLike = async () => {
@@ -28,6 +44,7 @@ const Post = ({ post, onDeleteSuccess }) => {
             },
         });
         const listUserLike = response.data.users;
+        setLikeCount(response.data.users.length);
         listUserLike.forEach((user) => {
             if (user.username === currentUser.username) {
                 setLiked(true);
@@ -53,7 +70,7 @@ const Post = ({ post, onDeleteSuccess }) => {
 
     useEffect(() => {
         onLike();
-    }, [post]);
+    }, [showPostDetail]);
 
     return (
         <div className="post">
@@ -65,7 +82,15 @@ const Post = ({ post, onDeleteSuccess }) => {
                             <Link to={`/${post.user.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <span className="name">{post.user.full_name}</span>
                             </Link>
-                            <span className="date">{timeDifference}</span>
+                            <div className="info-post" onClick={ShowPostDetail}>
+                                <span className="time">{timeDifference}</span>
+                                <i
+                                    className={`fas ${
+                                        statusPost.find((status) => status.accessModifier === post.access_modifier)
+                                            ?.classIcon || ''
+                                    }`}
+                                ></i>
+                            </div>
                         </div>
                     </div>
                     {post.user.id === currentUser.id && (
@@ -80,6 +105,24 @@ const Post = ({ post, onDeleteSuccess }) => {
                     )}
 
                     {openModal && <ModalPost post={post} onClose={closeModalPost} onDeleteSuccess={onDeleteSuccess} />}
+                    {showPostDetail && (
+                        <PostDetail
+                            post={post}
+                            closeModal={CloseModalPostDetail}
+                            showPostDetail={showPostDetail}
+                            setCommentCountPost={setCommentCount}
+                            comment_countPost={comment_count}
+                        />
+                    )}
+                    {commentOpen && (
+                        <PostDetail
+                            post={post}
+                            closeModal={CloseComment}
+                            showPostDetail={showPostDetail}
+                            setCommentCountPost={setCommentCount}
+                            comment_countPost={comment_count}
+                        />
+                    )}
                 </div>
                 <div className="content">
                     <p dangerouslySetInnerHTML={{ __html: post.content }}></p>
@@ -94,18 +137,11 @@ const Post = ({ post, onDeleteSuccess }) => {
                         )}
                         {like_count} Likes
                     </div>
-                    <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
+                    <div className="item" onClick={() => ShowComment()}>
                         <i className="fas fa-comments font-size-18"></i>
                         {comment_count} Comments
                     </div>
-                    <div className="item">
-                        <i className="fas fa-share font-size-18"></i>
-                        Share
-                    </div>
                 </div>
-                {commentOpen && (
-                    <Comments comments={post.comments} postId={post.post_id} setCommentCount={setCommentCount} />
-                )}
             </div>
         </div>
     );

@@ -36,8 +36,16 @@
                             font-weight: 500;
                         }
 
-                        .date {
+                        .info-post {
                             font-size: 12px;
+                            font-weight: 500;
+                            color: gray;
+                            display: flex;
+                            gap: 10px;
+                            align-items: center;
+                            &:hover {
+                                cursor: pointer;
+                            }
                         }
                     }
                 }
@@ -325,31 +333,561 @@
                         }
                     }
                 }
-            }
+                .modal-post-detail {
+                    .modal-overlay {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: rgba(0, 0, 0, 0.5);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 100;
 
-            .content {
-                margin: 10px 0px;
-                img {
-                    width: 70%;
-                    // max-height: 500px;
-                    object-fit: cover;
-                    // margin-top: 20px;
-                }
-            }
+                        .modal {
+                            background: themed('bg');
+                            padding: 20px;
+                            border-radius: 8px;
+                            width: 720px;
+                            max-width: 90%;
+                            display: flex;
+                            flex-direction: column;
+                            min-height: 700px;
+                            overflow: hidden;
+                            box-sizing: border-box;
+                            .title-top {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding-bottom: 10px;
+                                border-bottom: 2px solid rgb(207, 204, 204);
+                                margin-bottom: 20px;
+                                .title {
+                                    font-size: 25px;
+                                    font-weight: 600;
+                                    text-align: center;
+                                    color: themed('textColorSoft');
+                                    width: 100%;
+                                }
+                                .close-button {
+                                    background: none;
+                                    border: none;
+                                    font-size: 1.5rem;
+                                    cursor: pointer;
+                                    i {
+                                        color: themed('textColorSoft');
+                                    }
+                                }
+                            }
+                            .body {
+                                max-height: 500px;
+                                overflow-y: auto; /* Thêm thanh cuộn dọc khi nội dung vượt quá */
+                                padding: 16px; /* Tùy chọn: thêm khoảng cách bên trong */
+                                box-sizing: border-box; /* Đảm bảo padding không ảnh hưởng đến kích thước */
+                                flex-grow: 1;
+                                .user-modal {
+                                    display: flex;
+                                    gap: 10px;
+                                    .user-avatar {
+                                        width: 40px;
+                                        height: 40px;
 
-            .info {
-                display: flex;
-                align-items: center;
-                gap: 20px;
+                                        img {
+                                            width: 100%;
+                                            height: 100%;
+                                            border-radius: 50%;
+                                            object-fit: cover;
+                                        }
+                                    }
 
-                .item {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    cursor: pointer;
-                    font-size: 14px;
+                                    .info {
+                                        display: flex;
+                                        align-items: start;
+                                        flex-direction: column;
+                                        gap: 2px;
+                                        .info-name {
+                                            font-size: 15px;
+                                            font-weight: 600;
+                                        }
+                                        .info-post {
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                            color: gray;
+                                            display: flex;
+                                            gap: 10px;
+                                            align-items: center;
+                                        }
+                                    }
+                                }
+                                .content {
+                                    .content-img {
+                                        // max-height: 400px;
+                                        width: 70%;
+                                        object-fit: cover;
+                                    }
+                                }
+                                .info {
+                                    .item {
+                                        margin-bottom: 10px;
+                                    }
+                                    border-bottom: 2px solid rgb(207, 204, 204);
+                                }
+                                .comment {
+                                    margin: 10px 0px;
+                                    gap: 20px;
+
+                                    .comment-content {
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: start;
+                                        gap: 10px;
+                                        .info-img {
+                                            width: 40px;
+                                            height: 40px;
+                                            object-fit: cover;
+                                            border-radius: 50%;
+                                        }
+                                        .info {
+                                            flex: 5;
+                                            display: flex;
+                                            flex-direction: column;
+                                            gap: 3px;
+                                            align-items: flex-start;
+                                            border-bottom: 0px;
+                                            span {
+                                                font-weight: 500;
+                                            }
+
+                                            p {
+                                                color: themed('textColorSoft');
+                                                margin: 0px;
+                                            }
+                                            .info-top {
+                                                display: flex;
+                                                gap: 20px;
+                                                align-items: center;
+                                                position: relative;
+
+                                                .info-content {
+                                                    position: relative;
+                                                }
+                                                .modal-edit {
+                                                    position: static;
+                                                    top: 0;
+                                                    .write {
+                                                        margin: 0;
+                                                        width: 500px;
+                                                        .write-content {
+                                                            .write-input {
+                                                                width: 100%;
+                                                                padding: 10px 20px;
+                                                                background-color: #f6f3f3;
+                                                                border-radius: 10px;
+                                                                max-height: 350px;
+                                                                .input-textarea {
+                                                                    // height: 30px;
+                                                                    width: 100%;
+                                                                    font-size: 16px;
+                                                                    background-color: transparent;
+                                                                    border: none;
+                                                                    max-height: 300px;
+                                                                    // padding: 10px 20px;
+                                                                    box-sizing: border-box;
+                                                                    resize: none;
+                                                                    color: themed('textColorSoft');
+
+                                                                    &:focus {
+                                                                        outline: none;
+                                                                    }
+                                                                }
+                                                                .btn-icon {
+                                                                    margin-left: 0;
+                                                                    display: flex;
+                                                                    justify-content: space-between;
+                                                                }
+                                                            }
+                                                        }
+                                                        .image-preview {
+                                                            max-width: 20%;
+                                                            max-height: 200px;
+                                                            display: flex;
+                                                            gap: 10px;
+                                                            margin-top: 10px;
+                                                            img {
+                                                                width: 100%;
+                                                                height: 100%;
+                                                                border-radius: 10px;
+                                                                object-fit: cover;
+                                                            }
+                                                        }
+                                                        .btn-cancel {
+                                                            margin-top: 5px;
+                                                            cursor: pointer;
+                                                            color: blue;
+                                                        }
+                                                    }
+                                                }
+                                                .btn-menu {
+                                                    display: none;
+                                                    width: 20px;
+                                                    height: 20px;
+                                                    padding: 5px;
+                                                    border-radius: 50%;
+                                                    justify-content: center; /* Căn giữa theo chiều ngang */
+                                                    align-items: center; /* Căn giữa theo chiều dọc */
+                                                    &:hover {
+                                                        cursor: pointer;
+                                                        background-color: themed('bgSoft'); /* Màu nền */
+                                                    }
+                                                }
+
+                                                .modal-menu {
+                                                    position: absolute;
+                                                    top: 50px;
+                                                    right: -50px;
+                                                    display: flex;
+                                                    flex-direction: column;
+                                                    justify-content: start;
+                                                    width: 100px;
+                                                    height: auto;
+                                                    background-color: themed('bgSoft');
+                                                    padding: 10px;
+                                                    border-radius: 10px;
+                                                    z-index: 1000;
+                                                    .btn {
+                                                        padding: 5px 10px;
+                                                        border-radius: 5px;
+                                                        display: flex;
+                                                        justify-content: start;
+                                                        &:hover {
+                                                            background-color: rgb(162, 160, 160);
+                                                            cursor: pointer;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            &:hover .btn-menu {
+                                                display: flex;
+                                                opacity: 0.8;
+                                            }
+                                            .comment-img {
+                                                width: auto;
+                                                height: 150px;
+                                                cursor: pointer;
+                                                img {
+                                                    width: 100%;
+                                                    height: 100%;
+                                                    object-fit: cover;
+                                                    border-radius: 10px;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .btn-icon {
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 20px;
+                                        margin-left: 50px;
+                                        margin-top: 5px;
+                                        .date {
+                                            align-self: center;
+                                            color: gray;
+                                            font-size: 12px;
+                                        }
+
+                                        i {
+                                            cursor: pointer;
+                                        }
+                                        .btn-comment {
+                                            display: flex;
+                                            gap: 5px;
+                                            align-items: center;
+                                        }
+                                    }
+                                    .showReply {
+                                        margin-left: 50px;
+                                        margin-top: 5px;
+                                        font-size: 13px;
+                                        font-weight: 500;
+                                        color: gray;
+                                        &:hover {
+                                            cursor: pointer;
+                                        }
+                                    }
+                                    .replies {
+                                        display: flex;
+                                        flex-direction: column;
+                                        margin-left: 50px;
+                                        gap: 10px;
+                                        margin-top: 10px;
+                                        .reply-item {
+                                            .item-content {
+                                                display: flex;
+                                                gap: 10px;
+                                                .info-img {
+                                                    width: 40px;
+                                                    height: 40px;
+                                                    object-fit: cover;
+                                                    border-radius: 50%;
+                                                }
+                                                .info {
+                                                    flex: 5;
+                                                    display: flex;
+                                                    flex-direction: column;
+                                                    gap: 3px;
+                                                    align-items: flex-start;
+                                                    border-bottom: 0px;
+                                                    span {
+                                                        font-weight: 500;
+                                                    }
+
+                                                    p {
+                                                        color: themed('textColorSoft');
+                                                        margin: 0px;
+                                                    }
+                                                    .info-top {
+                                                        display: flex;
+                                                        gap: 20px;
+                                                        align-items: center;
+                                                        position: relative;
+
+                                                        .info-content {
+                                                            position: relative;
+                                                        }
+                                                        .modal-edit {
+                                                            position: static;
+                                                            top: 0;
+                                                            .write {
+                                                                margin: 0;
+                                                                width: 500px;
+                                                                .write-content {
+                                                                    .write-input {
+                                                                        width: 100%;
+                                                                        padding: 10px 20px;
+                                                                        background-color: #f6f3f3;
+                                                                        border-radius: 10px;
+                                                                        max-height: 350px;
+                                                                        .input-textarea {
+                                                                            // height: 30px;
+                                                                            width: 100%;
+                                                                            font-size: 16px;
+                                                                            background-color: transparent;
+                                                                            border: none;
+                                                                            max-height: 300px;
+                                                                            // padding: 10px 20px;
+                                                                            box-sizing: border-box;
+                                                                            resize: none;
+                                                                            color: themed('textColorSoft');
+
+                                                                            &:focus {
+                                                                                outline: none;
+                                                                            }
+                                                                        }
+                                                                        .btn-icon {
+                                                                            margin-left: 0;
+                                                                            display: flex;
+                                                                            justify-content: space-between;
+                                                                        }
+                                                                    }
+                                                                }
+                                                                .image-preview {
+                                                                    max-width: 20%;
+                                                                    max-height: 200px;
+                                                                    display: flex;
+                                                                    gap: 10px;
+                                                                    margin-top: 10px;
+                                                                    img {
+                                                                        width: 100%;
+                                                                        height: 100%;
+                                                                        border-radius: 10px;
+                                                                        object-fit: cover;
+                                                                    }
+                                                                }
+                                                                .btn-cancel {
+                                                                    margin-top: 5px;
+                                                                    cursor: pointer;
+                                                                    color: blue;
+                                                                }
+                                                            }
+                                                        }
+                                                        .btn-menu {
+                                                            display: none;
+                                                            width: 20px;
+                                                            height: 20px;
+                                                            padding: 5px;
+                                                            border-radius: 50%;
+                                                            justify-content: center; /* Căn giữa theo chiều ngang */
+                                                            align-items: center; /* Căn giữa theo chiều dọc */
+                                                            &:hover {
+                                                                cursor: pointer;
+                                                                background-color: themed('bgSoft'); /* Màu nền */
+                                                            }
+                                                        }
+
+                                                        .modal-menu {
+                                                            position: absolute;
+                                                            top: 50px;
+                                                            right: -50px;
+                                                            display: flex;
+                                                            flex-direction: column;
+                                                            justify-content: start;
+                                                            width: 100px;
+                                                            height: auto;
+                                                            background-color: themed('bgSoft');
+                                                            padding: 10px;
+                                                            border-radius: 10px;
+                                                            z-index: 1000;
+                                                            .btn {
+                                                                padding: 5px 10px;
+                                                                border-radius: 5px;
+                                                                display: flex;
+                                                                justify-content: start;
+                                                                &:hover {
+                                                                    background-color: rgb(162, 160, 160);
+                                                                    cursor: pointer;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    &:hover .btn-menu {
+                                                        display: flex;
+                                                        opacity: 0.8;
+                                                    }
+                                                    .comment-img {
+                                                        width: auto;
+                                                        height: 150px;
+                                                        cursor: pointer;
+                                                        img {
+                                                            width: 100%;
+                                                            height: 100%;
+                                                            object-fit: cover;
+                                                            border-radius: 10px;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .footer {
+                                display: flex;
+                                align-items: flex-start;
+                                justify-content: space-between;
+                                gap: 10px;
+                                margin: 25px 0px 0px 0px;
+                                .write-img {
+                                    width: 40px;
+                                    height: 40px;
+                                    img {
+                                        width: 100%;
+                                        height: 100%;
+                                        object-fit: cover;
+                                        border-radius: 50%;
+                                    }
+                                }
+                                .write-content {
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                    .write-input {
+                                        padding: 10px 20px;
+                                        background-color: themed('bgSoft');
+                                        border-radius: 10px;
+                                        max-height: 350px;
+                                        input {
+                                            flex: 5;
+                                            padding: 10px;
+                                            border: none;
+                                            color: themed('textColor');
+                                            background-color: themed('bgSoft');
+                                            width: 100%;
+                                            font-size: 15px;
+                                            box-sizing: border-box;
+                                            border-radius: 10px;
+                                            &:focus {
+                                                border: none;
+                                                outline: none;
+                                            }
+                                        }
+                                        .input-textarea {
+                                            height: 23px;
+                                            width: 100%;
+                                            font-size: 15px;
+                                            background-color: themed('bgSoft');
+                                            border: none;
+                                            max-height: 300px;
+                                            // padding: 10px 20px;
+                                            box-sizing: border-box;
+                                            resize: none;
+                                            color: themed('textColorSoft');
+
+                                            &:focus {
+                                                outline: none;
+                                            }
+                                        }
+                                        .btn-icon {
+                                            display: flex;
+                                            justify-content: space-between;
+                                        }
+                                    }
+                                    .image-preview {
+                                        max-width: 20%;
+                                        max-height: 200px;
+                                        display: flex;
+                                        gap: 10px;
+                                        margin-top: 10px;
+                                        img {
+                                            width: 100%;
+                                            height: 100%;
+                                            border-radius: 10px;
+                                            object-fit: cover;
+                                        }
+                                    }
+                                }
+                                .btn-cancel {
+                                    margin-top: 5px;
+                                    cursor: pointer;
+                                    color: blue;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+
+        .content {
+            margin: 10px 0px;
+            img {
+                width: 70%;
+                // max-height: 500px;
+                object-fit: cover;
+                // margin-top: 20px;
+            }
+            .content-img {
+                width: 60%;
+            }
+        }
+
+        .info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            .item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+        }
     }
+}
+.notifi {
+    width: 60%;
+    margin-left: 20px;
+    margin-top: 10px;
 }

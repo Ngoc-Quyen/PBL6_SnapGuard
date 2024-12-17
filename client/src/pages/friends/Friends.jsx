@@ -10,10 +10,10 @@ import ListFriends from './ListFriends';
 const Friends = () => {
     return (
         <div>
-            {/* <ListFriends /> */}
+            <ListFriends />
             <ListFriendsRequest linkAPI={'friend/requests/incoming'} />
             <ListFriendsRequestOut linkAPI={'friend/requests/outgoing'} />
-            <ListFriendsSuggestion />
+            <ListFriendsSuggestion linkAPI={'friend/possible-friends'} />
         </div>
     );
 };

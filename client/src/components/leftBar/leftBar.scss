@@ -45,6 +45,10 @@
                 background-color: themed('bgSoft');
                 border-radius: 10px;
             }
+            .active {
+                font-weight: bold; /* Tùy chọn: Làm nổi bật */
+                color: #2db6aa; /* Màu chữ khi active */
+            }
         }
         .footer {
             color: #0c322f;
