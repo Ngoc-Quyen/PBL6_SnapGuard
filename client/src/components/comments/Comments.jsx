@@ -147,7 +147,6 @@ const Comments = ({ comments, postId, setCommentCount }) => {
             ...prevState,
             [id]: !prevState[id],
         }));
-        console.log('🚀 ~ Comments ~ showModalEdit:', showModalEdit);
         setModalVisible((prevState) => ({
             ...prevState,
             [id]: false,
@@ -264,7 +263,7 @@ const Comments = ({ comments, postId, setCommentCount }) => {
                                     >
                                         <i class="fas fa-ellipsis-h"></i>
                                     </div>
-                                    {isModalVisible[comment.comment_id] && (
+                                    {isModalVisible[comment.comment_id] && comment.user.id === currentUser.id && (
                                         <div className="modal-menu">
                                             <div
                                                 className="btn btn-edit"

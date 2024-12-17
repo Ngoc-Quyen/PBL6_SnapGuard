@@ -89,7 +89,28 @@
                     font-size: 20px;
                 }
             }
+            .btn-notification {
+                position: relative;
 
+                .number-notifine {
+                    padding: 5px;
+                    border-radius: 50%;
+                    width: 10px;
+                    height: 10px;
+                    background-color: rgba(255, 0, 0, 0.666);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    top: -15px;
+                    right: 10px;
+                    left: 10px;
+                    span {
+                        font-size: 15px;
+                        font-weight: 500;
+                    }
+                }
+            }
             .user {
                 display: flex;
                 align-items: center;

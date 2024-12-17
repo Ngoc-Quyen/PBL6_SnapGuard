@@ -3,7 +3,7 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { Link } from 'react-router-dom';
-import { useContext, useState, useRef } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { DarkModeContext } from '../../context/darkModeContext';
 import { AuthContext } from '../../context/authContext';
 import bg_green_tree from '../../assets/images/bg-matcha-pastel.svg';
@@ -12,8 +12,15 @@ import ChatLeft from '../../pages/chat/ChatLeft';
 import Notification from '../notification/Notification';
 import SearchHome from '../../pages/search/SearchHome';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
+import { realTime } from '../../utils/calculateTimeDifference ';
+import axios from 'axios';
 
 const Navbar = () => {
+    const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+    const storedToken = localStorage.getItem('token');
+
+    const [listNotifineNoRead, setListNotifineNoRead] = useState([]);
+
     const { toggle, darkMode } = useContext(DarkModeContext);
     const { currentUser } = useContext(AuthContext);
     const [isChatOpen, setIsChatOpen] = useState(false);
@@ -22,9 +29,26 @@ const Navbar = () => {
     const [showSearchResults, setShowSearchResults] = useState(false);
     const chatRef = useRef();
     const notificationRef = useRef();
+    const realDateTime = realTime();
+    const [numberNotifine, setNumberNotifine] = useState(0);
 
     useOnClickOutside(chatRef, () => setIsChatOpen(false));
     useOnClickOutside(notificationRef, () => setIsNotificationOpen(false));
+
+    const handleListNotifine = async () => {
+        try {
+            const result = await axios.get(`${API_ENDPOINT}/notification`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                },
+            });
+            const listNotifine = result.data;
+            const unReadNotifine = listNotifine.filter((notifine) => notifine.is_read === false);
+            setListNotifineNoRead(unReadNotifine);
+        } catch (error) {
+            console.log('🚀 ~ listNotifine ~ error:', error);
+        }
+    };
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
@@ -49,8 +73,13 @@ const Navbar = () => {
         setSearchQuery('');
         setShowSearchResults(false);
     };
-
-
+    const handleNumberNotifine = async () => {
+        handleListNotifine();
+        setNumberNotifine(listNotifineNoRead.length);
+    };
+    useEffect(() => {
+        handleNumberNotifine();
+    }, [realDateTime]);
     return (
         <div className="navbar">
             <div className="left">
@@ -75,16 +104,19 @@ const Navbar = () => {
                         <i className="fas fa-times"></i>
                     </button>
                 )}
-                {showSearchResults && (
-                    <SearchHome query={searchQuery} />
-                )}
+                {showSearchResults && <SearchHome query={searchQuery} />}
             </div>
             <div className="right">
                 <div className="btn-icon btn-chat" onClick={handleToggleChat}>
                     <i class="fab fa-facebook-messenger"></i>
                 </div>
-                <div className="btn-icon btn-notification" onClick={handleToggleNotification}>
+                <div className="btn-icon btn-notification btn" onClick={handleToggleNotification}>
                     <i class="far fa-bell"></i>
+                    {numberNotifine > 0 && (
+                        <div className="number-notifine">
+                            <span>{numberNotifine}</span>
+                        </div>
+                    )}
                 </div>
 
                 <Link className="user" to={`/${currentUser.id}`}>
