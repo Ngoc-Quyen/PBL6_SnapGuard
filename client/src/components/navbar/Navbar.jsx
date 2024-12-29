@@ -83,7 +83,11 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <div className="left">
-                <Link to="/" style={{ textDecoration: 'none', width: '120px', height: 'auto' }}>
+                <Link
+                    to="/"
+                    style={{ textDecoration: 'none', width: '120px', height: 'auto' }}
+                    onClick={() => window.location.reload()}
+                >
                     <img className="img-logo" src={darkMode ? bg_green_black : bg_green_tree} alt="Logo" />
                 </Link>
                 {darkMode ? <WbSunnyOutlinedIcon onClick={toggle} /> : <DarkModeOutlinedIcon onClick={toggle} />}
@@ -133,7 +137,7 @@ const Navbar = () => {
 
             {isNotificationOpen && (
                 <div className="show-chat" ref={notificationRef}>
-                    <Notification />
+                    <Notification setNumberNotifine={setNumberNotifine} />
                 </div>
             )}
         </div>

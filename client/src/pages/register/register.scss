@@ -93,16 +93,34 @@
                     }
                 }
 
-                button {
+                button,
+                .btn {
                     width: 100%;
                     padding: 10px;
                     border: none;
                     border-radius: 10px;
-                    background-color: #2db6aa;
-                    color: white;
                     font-weight: bold;
                     cursor: pointer;
                     font-size: 15px;
+                }
+                .btnSubmit {
+                    background-color: #2db6aa;
+                    color: white;
+                }
+                .btnGG {
+                    background-color: #fff;
+                    color: #2db6aa;
+                    border: #2db6aa 1px solid;
+                    box-sizing: border-box;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+
+                    .btnGG-img {
+                        width: 20px;
+                        height: 20px;
+                    }
                 }
             }
         }

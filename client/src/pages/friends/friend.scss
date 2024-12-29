@@ -98,9 +98,14 @@
                         color: #ffff;
                         font-weight: 500;
                         cursor: pointer;
+                        text-decoration: none;
                     }
                     .btn-accept {
                         background-color: #2db6aa;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-sizing: border-box;
                         &:hover {
                             opacity: 0.7;
                         }

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './notification.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { calculateTimeDifference } from '../../utils/calculateTimeDifference ';
 import axios from 'axios';
+import Post from '../post/Post';
+import { typeNotifine } from '../../utils/typeNotifine';
 
 const NotificationNew = ({ notifi, handleListNotifine }) => {
     const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
@@ -29,23 +31,29 @@ const NotificationNew = ({ notifi, handleListNotifine }) => {
             console.log('đã click');
         }
     };
+    const navigate = useNavigate();
+    const handleClickFriends = async () => {
+        if (notifi.type === typeNotifine.FRIEND_REQUEST) {
+            navigate(`/${notifi.sender.id}`);
+        } else {
+            navigate(`/post/${notifi.post_id}`);
+        }
+    };
     return (
         <div
             className="item-chat"
             onClick={() => {
                 handleCheckRead();
+                handleClickFriends();
             }}
         >
             <div className="item-avata">
-                <img src={notifi.sender.avatar_url} alt="" />
                 <img src={notifi.sender.avatar_url} alt="" />
             </div>
             <div className="item-content">
                 <p className="content cl-text">
                     <span className="name">{notifi.sender.full_name}</span> {notifi.content}
-                    <span className="name">{notifi.sender.full_name}</span> {notifi.content}
                 </p>
-                <span className="time cl-blue">{calculateTimeDifference(notifi.created_at)}</span>
                 <span className="time cl-blue">{calculateTimeDifference(notifi.created_at)}</span>
             </div>
 

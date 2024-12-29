@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import './share.scss';
 import Select from 'react-select';
 import { statusPost } from '../../utils/status';
-import defaultImage from '../../assets/images/anhNhayCam.png'
+import defaultImage from '../../assets/images/anhNhayCam.png';
 import axios from 'axios';
 
 const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
@@ -16,7 +16,6 @@ const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
         setValues('');
         onClose();
     };
-
 
     const handleImageUpload = async (e) => {
         const files = Array.from(e.target.files); // Lấy danh sách các tệp
@@ -54,13 +53,10 @@ const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
             }
         }
 
-
         const dataTransfer = new DataTransfer();
         validFiles.forEach((file) => dataTransfer.items.add(file));
         fileInputRef.current.files = dataTransfer.files;
     };
-
-
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Ngăn reload trang
@@ -73,7 +69,6 @@ const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
             if (fileInputRef.current.files[0]) {
                 formData.append('image', fileInputRef.current.files[0]); // Thêm file ảnh vào FormData
             }
-
 
             // Gọi API
             const response = await axios.post(`${API_ENDPOINT}/posts`, formData, {
@@ -157,7 +152,6 @@ const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
         setImagePreviews((imagePreviews) => imagePreviews.filter((_, i) => i !== index));
     };
 
-
     return (
         <div>
             <div className="modal-overlay">
@@ -223,7 +217,7 @@ const ModalPost = ({ userName, onClose, onPostCreated, ...props }) => {
                                             accept="image/png, image/jpeg, image/gif"
                                             ref={fileInputRef} // Gán tham chiếu
                                             onChange={handleImageUpload}
-                                            multiple
+                                            // multiple
                                         />
                                         <i class="fa-regular fa-image" title="Ảnh/Video" onClick={handleIconClick}></i>
                                     </div>

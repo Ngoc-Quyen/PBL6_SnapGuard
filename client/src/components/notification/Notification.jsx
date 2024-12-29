@@ -3,7 +3,7 @@ import './notification.scss';
 import NotifiAll from './NotifiAll';
 import NotifiNonRead from './NotifiNonRead';
 import axios from 'axios';
-const Notification = () => {
+const Notification = ({ setNumberNotifine }) => {
     const [nonRead, setNonRead] = useState(false);
     const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
     const storedToken = localStorage.getItem('token');
@@ -17,8 +17,10 @@ const Notification = () => {
                 },
             });
             setListNotifine(result.data);
+
             const unReadNotifine = listNotifine.filter((notifine) => notifine.is_read === false);
             setListNotifineNoRead(unReadNotifine);
+            setNumberNotifine(0);
         } catch (error) {
             console.log('🚀 ~ listNotifine ~ error:', error);
         }

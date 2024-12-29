@@ -223,6 +223,42 @@ export const AuthContextProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify({ ...currentUser, avatar_url: newAvatarUrl }));
     };
 
+    const googleAuth = async (tokenAuth) => {
+        const response = await axios.post(`${API_ENDPOINT}/auth/google-login`, { token: tokenAuth });
+
+        const user = response.data.user;
+        const token = response.data.token;
+        // Lưu thông tin user và token vào localStorage
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('token', token);
+        setCurrentUser(user);
+
+        // Kết nối socket khi login thành công
+        const socketConnection = io(API_ENDPOINT, {
+            query: { userId: user.id },
+        });
+        socketConnection.connect();
+
+        setSocket(socketConnection);
+
+        // Lắng nghe sự kiện connectSuccess
+        socketConnection.on('connectSuccess', (data) => {
+            console.log('Server message:', data.message); // Hiển thị tin nhắn từ server
+        });
+
+        // Lắng nghe sự kiện connect thành công
+        socketConnection.on('connect', () => {
+            setIsConnected(true); // Cập nhật trạng thái kết nối
+        });
+
+        // Lắng nghe sự kiện disconnect (khi ngắt kết nối)
+        socketConnection.on('disconnect', () => {
+            console.log('Socket disconnected', socketConnection.id);
+            setIsConnected(false);
+        });
+
+        return { success: true };
+    };
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         const storedToken = localStorage.getItem('token');
@@ -243,7 +279,9 @@ export const AuthContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ currentUser, register, login, logout, updateAvatar, socket, isConnected }}>
+        <AuthContext.Provider
+            value={{ currentUser, register, login, logout, updateAvatar, socket, isConnected, googleAuth }}
+        >
             {children}
         </AuthContext.Provider>
     );

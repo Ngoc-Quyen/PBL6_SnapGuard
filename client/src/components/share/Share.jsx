@@ -6,7 +6,6 @@ import useClickOutSide from '../../hooks/useClickOutSide';
 
 const Share = ({ onPostCreated }) => {
     const { currentUser } = useContext(AuthContext);
-    const [file, setFile] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { show, setShow, nodeRef } = useClickOutSide();
 
@@ -16,12 +15,6 @@ const Share = ({ onPostCreated }) => {
     };
     const closeModal = () => {
         setIsModalOpen(!isModalOpen);
-    };
-    const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            setFile(selectedFile);
-        }
     };
     return (
         <div className="share">

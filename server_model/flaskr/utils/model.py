@@ -4,7 +4,7 @@ from PIL import Image
 
 # Tải mô hình đã lưu
 # model = load_model('D:\Ki7\PBL6_SnapGuard\server_model\model\mobileNet_2class_v3_11_11.keras')  # Thay đổi đường dẫn nếu cần
-model = load_model('./model/mobileNet_2class_v3_11_11.keras')
+model = load_model('./model/mobileNet_2class_v4_11_12.keras')
 # Xác định các lớp dự đoán
 class_names = ['safe', 'unsafe']
 
@@ -15,10 +15,10 @@ def preprocess_image(image):
             image = image.convert('RGB')
         
         # Thay đổi kích thước ảnh
-        image = image.resize((180, 180))  # Kích thước ảnh đầu vào
+        image = image.resize((224, 224))  # Kích thước ảnh đầu vào
         
         # Chuyển đổi ảnh sang mảng numpy và chuẩn hóa giá trị
-        image = np.array(image) / 255.0
+        # image = np.array(image) / 255.0
         
         # Thêm chiều batch để phù hợp với đầu vào của mô hình 
 

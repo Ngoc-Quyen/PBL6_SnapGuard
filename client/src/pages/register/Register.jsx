@@ -132,7 +132,9 @@ const Register = () => {
                                 <Field type="text" placeholder="Name" name="full_name" />
                                 <ErrorMessage name="full_name" component="div" className="errorMessage" />
                             </div>
-                            <button type="submit">Đăng kí</button>
+                            <button type="submit" className="btnSubmit">
+                                Đăng kí
+                            </button>
                         </Form>
                     </Formik>
                 </div>

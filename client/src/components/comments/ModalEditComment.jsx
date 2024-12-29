@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const ModalEditComment = ({ user, comment, onClose, getListComment, setListComments }) => {
+const ModalEditComment = ({ comment, onClose, getListComment, setListComments }) => {
     const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
     const storedToken = localStorage.getItem('token');
     const [content, setContent] = useState(comment.content);

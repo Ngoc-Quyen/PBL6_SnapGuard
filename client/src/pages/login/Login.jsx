@@ -5,50 +5,19 @@ import welcome from '../../assets/images/welcome.png';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../hooks/useAuth';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        let token = localStorage.getItem("token");
+        let token = localStorage.getItem('token');
         if (token) {
-            navigate('/')
+            navigate('/');
         }
     }, []);
 
-    const { login } = useAuth();
-    const users = [
-        { email: 'ngocquyenmon262@gmail.com', password: 'Tr@nngocquyen262' },
-        { email: 'tranngocquyen262dc@gmail.com', password: 'Tr@nngocquyen262' },
-    ];
-    // Hàm Login
-    const testLogin = (credentials) => {
-        const { email, password } = credentials;
-        const user = users.find((u) => u.email === email && u.password === password);
-        const defaultProfilePic = 'https://i.pinimg.com/736x/63/50/95/635095b2a3c65527fffe9432c1d45363.jpg';
-        const name = 'Ngọc Quyên';
-        if (user) {
-            const userWithProfilePic = {
-                ...user,
-                profilePic: defaultProfilePic,
-                name: name,
-            };
-            // Nếu đăng nhập thành công, lưu thông tin người dùng vào localStorage
-            localStorage.setItem('user', JSON.stringify(userWithProfilePic));
-            localStorage.setItem('token', 'mocked-token'); // Tạo một token giả
-            setUser(userWithProfilePic);
-            console.log('Login successful:', userWithProfilePic);
-            navigate('/');
-            setItemWithExpiry('user', userWithProfilePic);
-        } else {
-            console.error('Login failed: Invalid username or password');
-        }
-    };
-    // Hàm giả lập setUser (có thể là một hook hoặc một phương thức trong state)
-    const setUser = (user) => {
-        // Thực hiện các hành động khi đăng nhập thành công, ví dụ: cập nhật state
-        console.log('User set:', user);
-    };
+    const { login, googleAuth } = useAuth();
 
     const handleLogin = async (values) => {
         const result = await login(values);
@@ -60,12 +29,17 @@ const Login = () => {
             alert(result.message || 'Login failed. Please try again.');
         }
     };
-    const handleCheckUser = () => {
-        const storedUser = getItemWithExpiry('user');
-        if (storedUser) {
-            console.log('User is logged in:', storedUser);
-        } else {
-            console.log('No user logged in or session expired');
+    const handleSuccess = async (credentialsResponse) => {
+        try {
+            const result = await googleAuth(credentialsResponse.credential);
+            if (result.success) {
+                navigate('/');
+            } else {
+                // Nếu đăng ký thất bại, hiển thị thông báo lỗi cho người dùng
+                alert(result.message || 'Login failed. Please try again.');
+            }
+        } catch (error) {
+            alert(error || 'Login failed. Please try again.');
         }
     };
     const [showPassword, setShowPassword] = useState(false);
@@ -120,7 +94,23 @@ const Login = () => {
                                 ></i>
                                 <ErrorMessage name="password" component="div" className="errorMessage" />
                             </div>
-                            <button type="submit">Đăng nhập</button>
+                            <button type="submit" className="btn btnSubmit">
+                                Đăng nhập
+                            </button>
+                            <GoogleLogin
+                                className="btn btnGG"
+                                onSuccess={handleSuccess}
+                                onError={() => {
+                                    alert('Login failed. Please try again.');
+                                }}
+                            >
+                                <img
+                                    src="https://www.svgrepo.com/show/303108/google-icon-logo.svg"
+                                    alt=""
+                                    className="btnGG-img"
+                                />
+                                <span>Đăng nhập bằng Google</span>
+                            </GoogleLogin>
                         </Form>
                     </Formik>
 

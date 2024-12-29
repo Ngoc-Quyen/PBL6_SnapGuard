@@ -33,7 +33,7 @@ const Friend = ({ friend }) => {
                         <i class="fas fa-user-check"></i>
                         <span>Bạn bè</span>
                     </div>
-                    <Link to={`/chat/${friend.friendId}`} className="btn-chat">
+                    <Link to={`/chat/${friend.id}`} className="btn-chat">
                         <i class="fab fa-facebook-messenger"></i>
                         <span>Nhắn tin</span>
                     </Link>

@@ -16,6 +16,8 @@ import ChatFull from './pages/chat/ChatFull';
 import ChatLeft from './pages/chat/ChatLeft';
 import ChatDetail from './pages/chat/ChatDetail';
 import MyProfile from './pages/profile/MyProfile';
+import PostDetail from './components/post/PostDetail';
+import PostNotifi from './components/post/PostNotifi';
 function App() {
     const { currentUser } = useAuth();
 
@@ -78,6 +80,10 @@ function App() {
                 {
                     path: '/:id',
                     element: <MyProfile />,
+                },
+                {
+                    path: '/post/:id',
+                    element: <PostNotifi />,
                 },
             ],
         },

@@ -1,21 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Friend from './Friend';
 import { listInvitation } from '../../utils/dataTest';
 import './friend.scss';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import FriendRequestOut from './FriendRequestGoOut';
+import { AuthContext } from '../../context/authContext';
+import MyFriend from './MyFriend';
 const ListFriends = () => {
     const [visibleCount, setVisibleCount] = useState(5);
     const [isClick, setIsClick] = useState(false);
     const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
     const [list, setList] = useState([]);
+    const { currentUser } = useContext(AuthContext);
 
     //TEMPORARY
     useEffect(() => {
         const fetchListFriends = async () => {
             try {
-                const response = await axios.get(`${API_ENDPOINT}/friend/list`);
+                const response = await axios.get(`${API_ENDPOINT}/friend/list/${currentUser.id}`);
                 setList(response.data); // Assume response.data contains the posts array
                 console.log('🚀 ~ fetchListFriends ~ response.data:', response);
             } catch (error) {
@@ -48,7 +51,7 @@ const ListFriends = () => {
             </div>
             <div className="show-list">
                 {list.slice(0, visibleCount).map((friend) => (
-                    <FriendRequestOut key={friend.id} friend={friend} />
+                    <MyFriend key={friend.id} friend={friend} />
                 ))}
             </div>
 

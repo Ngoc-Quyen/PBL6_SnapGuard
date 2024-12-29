@@ -7,7 +7,7 @@
         height: 87.5vh;
         background-color: themed('bg');
         color: themed('textColor');
-        min-width: 300px;
+        min-width: 350px;
         @include mobile {
             display: none;
         }

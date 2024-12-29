@@ -379,8 +379,8 @@
                         .friends {
                             display: flex;
                             flex-wrap: wrap; /* Cho phép xuống dòng khi số lượng phần tử vượt quá chiều rộng container */
-                            gap: 10px; /* Khoảng cách giữa các friend */
-                            justify-content: space-between; /* Dàn đều các phần tử trong hàng */
+                            gap: 50px 10px; /* Khoảng cách giữa các friend */
+                            justify-content: flex-start; /* Dàn đều các phần tử trong hàng */
                             padding: 0;
                             background-color: transparent;
                             margin-top: 10px;

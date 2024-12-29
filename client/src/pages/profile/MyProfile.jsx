@@ -9,6 +9,7 @@ import LeftMyProfile from './LeftMyProfile';
 import ListFriends from './ListFriends';
 import { Link, useParams } from 'react-router-dom';
 import LeftProfile from './LeftProfile';
+import { statusRelationship } from '../../utils/status';
 
 const MyProfile = () => {
     const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
@@ -45,7 +46,7 @@ const MyProfile = () => {
     };
     const fetchListFriends = async () => {
         try {
-            const response = await axios.get(`${API_ENDPOINT}/friend/list`, {
+            const response = await axios.get(`${API_ENDPOINT}/friend/list/${id}`, {
                 headers: {
                     Authorization: `Bearer ${storedToken}`,
                 },
@@ -93,13 +94,36 @@ const MyProfile = () => {
     };
     const handleAddFriends = async () => {
         postRequestFriend(id);
+        fetchUserProfile();
     };
     const handleCancelFriends = async (id) => {
         const result = await cancelRequestFriend(id);
         if (result) {
             setIsStatus('');
+            fetchUserProfile();
         } else {
             alert('Cancel khong thanh cong');
+        }
+    };
+    const acceptFriend = async (senderId) => {
+        try {
+            const response = await axios.post(`${API_ENDPOINT}/friend/accept/${senderId}`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                },
+            });
+            return true;
+        } catch (error) {
+            console.log('🚀 ~ acceptFriend ~ error:', error);
+            return false;
+        }
+    };
+    const handleAccept = async (senderId) => {
+        if (await acceptFriend(senderId)) {
+            console.log('Lời mời kết bạn đã được chấp nhận');
+            fetchUserProfile();
+        } else {
+            alert('Request không thành công');
         }
     };
     useEffect(() => {
@@ -149,7 +173,7 @@ const MyProfile = () => {
                     ) : (
                         <div className="right">
                             <div className="btn">
-                                {listFriends.includes(id) ? (
+                                {userProfile.relationshipStatus === statusRelationship.Accepted && (
                                     <>
                                         <button className="btn-friend">
                                             <i class="fas fa-user-check mr-6 mb-2"></i>
@@ -160,7 +184,42 @@ const MyProfile = () => {
                                             <span>Nhắn tin</span>
                                         </Link>
                                     </>
-                                ) : (
+                                )}
+                                {userProfile.relationshipStatus === statusRelationship.Pending && (
+                                    <>
+                                        <div
+                                            className="btn-request"
+                                            onClick={() => {
+                                                handleCancelFriends(id);
+                                            }}
+                                        >
+                                            <i class="fas fa-user-times mr-6 mb-2"></i>
+                                            Hủy lời mời
+                                        </div>
+                                        <Link to={`/chat/${userProfile.id}`} className="btn-chat non-friend">
+                                            <i class="fab fa-facebook-messenger mr-6 mb-2"></i>
+                                            <span>Nhắn tin</span>
+                                        </Link>
+                                    </>
+                                )}
+                                {userProfile.relationshipStatus === statusRelationship.Pending_by_target && (
+                                    <>
+                                        <div
+                                            className="btn-request"
+                                            onClick={() => {
+                                                handleAccept(id);
+                                            }}
+                                        >
+                                            <i class="fas fa-user-check mr-6 mb-2"></i>
+                                            Chấp nhận lời mời
+                                        </div>
+                                        <Link to={`/chat/${userProfile.id}`} className="btn-chat non-friend">
+                                            <i class="fab fa-facebook-messenger mr-6 mb-2"></i>
+                                            <span>Nhắn tin</span>
+                                        </Link>
+                                    </>
+                                )}
+                                {userProfile.relationshipStatus === statusRelationship.Stranger && (
                                     <>
                                         {isStatus === 'pending' ? (
                                             <div
@@ -201,7 +260,7 @@ const MyProfile = () => {
                         ) : (
                             <LeftProfile userProfile={userProfile} />
                         )}
-                        <ListFriends linkAPI={'friend/list'} />
+                        <ListFriends linkAPI={`friend/list/${id}`} />
                     </div>
                     <div className="uContent-Post">
                         <Posts userId={userProfile.id} linkAPI={`${userProfile.id}/posts`} refresh={refreshPosts} />

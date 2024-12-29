@@ -33,7 +33,7 @@
         padding: 10px;
         display: flex;
         flex-direction: column;
-        min-width: 300px;
+        min-width: 350px;
         .header {
             display: flex;
             justify-content: space-between;
@@ -99,6 +99,7 @@
                 &:hover {
                     background-color: #eeebeb;
                     border-radius: 10px;
+                    cursor: pointer;
                 }
             }
             .type-name {
